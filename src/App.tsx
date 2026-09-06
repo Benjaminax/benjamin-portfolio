@@ -6,7 +6,7 @@ import { Hero } from './components/Hero';
 import { Projects } from './components/Projects';
 import { About } from './components/About';
 import { Experience } from './components/Experience';
-import { HorizontalShowcase } from './components/HorizontalShowcase';
+
 import { Footer } from './components/Footer';
 import { NavOverlay } from './components/NavOverlay';
 import { FloatingHamburger } from './components/FloatingHamburger';
@@ -75,8 +75,8 @@ export function App() {
             <About />
             <Projects />
           </div>
-          <HorizontalShowcase />
-          <div className="bg-white text-[#1c1d20] relative z-10">
+
+          <div className="bg-white text-[#1c1d20] relative">
             <Experience />
           </div>
         </main>
