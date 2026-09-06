@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Neue Montreal';
+  src: url('/fonts/NeueMontreal-Regular.otf') format('opentype');
+  font-weight: 400 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Montreal';
+  src: url('/fonts/NeueMontreal-Bold.otf') format('opentype');
+  font-weight: 700 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Helvetica Georgian 55 Roman';
+  src: local('Neue Helvetica Georgian 55 Roman'),
+       local('NeueHelveticaGeorgian-55Roman'),
+       local('Neue Helvetica Georgian'),
+       local('Helvetica Neue LT Georgian 55 Roman'),
+       local('Helvetica Neue 55 Roman'),
+       local('Helvetica Neue');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-helvetica: 'Neue Helvetica Georgian 55 Roman', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'Plus Jakarta Sans', Arial, sans-serif;
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --color-canvas: #141516;
+  --color-canvas-subtle: #1c1d20;
+  --color-canvas-card: #191a1d;
+  --color-canvas-border: #2c2e33;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #141516;
+  color: #ffffff;
+  font-family: var(--font-helvetica);
+  overflow-x: hidden;
+  width: 100%;
+}
+
+#root {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  background-color: #141516;
+}
+
+/* Custom utility for the exact font requested */
+.font-neue-helvetica {
+  font-family: 'Neue Helvetica Georgian 55 Roman', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'Plus Jakarta Sans', Arial, sans-serif;
+  font-weight: 400;
+}
+
+.font-neue-montreal {
+  font-family: 'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, sans-serif;
+}
+
+/* Smooth custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #141516;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2c31;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3d4047;
+}
+
+@keyframes ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(4);
+    opacity: 0;
+  }
+}
+
