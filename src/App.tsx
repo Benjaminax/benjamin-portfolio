@@ -76,7 +76,7 @@ export function App() {
             <Projects />
           </div>
 
-          <div className="bg-white text-[#1c1d20] relative">
+          <div className="text-[#1c1d20] relative">
             <Experience />
           </div>
         </main>

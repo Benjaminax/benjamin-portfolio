@@ -12,15 +12,19 @@ export const Navbar: React.FC<NavbarProps> = ({ onReplayIntro }) => {
   };
 
   return (
-    <header className="absolute top-0 left-0 w-full z-40 px-8 sm:px-14 py-8 flex items-center justify-between pointer-events-none">
-      {/* brand logo hover track */}
+    <header className="absolute top-0 left-0 w-full z-40 px-5 sm:px-8 md:px-14 py-6 sm:py-8 flex items-center justify-between pointer-events-none">
+      {/* Brand — mobile: static "Jayden Smith", desktop: hover-slide */}
       <div
-        className="pointer-events-auto flex items-center gap-1.5 text-white text-lg sm:text-xl font-normal tracking-tight group cursor-pointer"
+        className="pointer-events-auto flex items-center gap-1.5 text-white text-base sm:text-xl font-normal tracking-tight group cursor-pointer"
         style={navFont}
       >
         <span className="transition-all duration-500 group-hover:opacity-40 shrink-0">©</span>
 
-        <span className="relative overflow-hidden inline-block">
+        {/* Mobile: just show the name */}
+        <span className="md:hidden text-white" onClick={onReplayIntro}>Jayden Smith</span>
+
+        {/* Desktop: hover-slide between "Code by Jayden" and "Jayden Smith" */}
+        <span className="hidden md:inline-block relative overflow-hidden">
           <span
             className="invisible block whitespace-nowrap pointer-events-none select-none"
             aria-hidden
@@ -49,9 +53,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onReplayIntro }) => {
         </span>
       </div>
 
-      {/* nav header items */}
+      {/* Nav links — desktop only; hamburger handles mobile */}
       <nav
-        className="pointer-events-auto flex items-center gap-8 sm:gap-12 text-white text-base sm:text-lg font-normal tracking-tight"
+        className="pointer-events-auto hidden md:flex items-center gap-8 sm:gap-12 text-white text-base sm:text-lg font-normal tracking-tight"
         style={navFont}
       >
         <a href="#projects" className="leading-none">

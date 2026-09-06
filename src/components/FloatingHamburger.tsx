@@ -12,10 +12,12 @@ export const FloatingHamburger: React.FC<FloatingHamburgerProps> = ({ isOpen, on
   const [showMenu, setShowMenu] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-  // toggle floating button after scroll past navbar
+  // On mobile: always show (it's the only nav control).
+  // On desktop: show only after scrolling past the navbar.
   useEffect(() => {
     const checkScroll = () => {
-      setShowMenu(window.scrollY > 60);
+      const isMobile = window.innerWidth < 768;
+      setShowMenu(isMobile || window.scrollY > 60);
     };
 
     checkScroll();
