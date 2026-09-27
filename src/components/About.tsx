@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Magnetic } from './Magnetic';
+import { useHoverCapability } from '../hooks/useHoverCapability';
 
 const statementLines = [
   'Helping brands to stand out in the digital era.',
@@ -60,6 +61,7 @@ const lineVariants = {
 };
 
 export const About: React.FC = () => {
+  const canHover = useHoverCapability();
   const [hasHoveredAboutButton, setHasHoveredAboutButton] = useState(false);
   const [aboutButtonLabelOffset, setAboutButtonLabelOffset] = useState({ x: 0, y: 0 });
 
@@ -139,9 +141,11 @@ export const About: React.FC = () => {
             <Magnetic strength={0.35}>
               <a
                 href="#contact"
-                onPointerEnter={() => setHasHoveredAboutButton(true)}
+                onPointerEnter={(event) => {
+                  if (canHover && event.pointerType === 'mouse') setHasHoveredAboutButton(true);
+                }}
                 onPointerMove={(event: React.PointerEvent<HTMLAnchorElement>) => {
-                  if (event.pointerType !== 'mouse') return;
+                  if (!canHover || event.pointerType !== 'mouse') return;
 
                   const bounds = event.currentTarget.getBoundingClientRect();
                   setAboutButtonLabelOffset({
@@ -183,7 +187,7 @@ export const About: React.FC = () => {
           {services.map((service) => (
             <motion.div
               key={service.num}
-              whileHover={{ y: -10, scale: 1.02, rotateX: 3, rotateY: -3 }}
+              whileHover={canHover ? { y: -10, scale: 1.02, rotateX: 3, rotateY: -3 } : undefined}
               transition={{ type: 'spring', stiffness: 350, damping: 25 }}
               className="group p-8 rounded-2xl bg-[#f8f9fa] border border-black/[0.08] hover:border-black/20 hover:shadow-2xl transition-all duration-500 flex flex-col justify-between cursor-pointer"
             >

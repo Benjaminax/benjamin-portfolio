@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { useHoverCapability } from '../hooks/useHoverCapability';
 
 interface NavbarProps {
   onToggleMenu?: () => void;
@@ -28,8 +29,10 @@ const NavItem: React.FC<NavItemProps> = ({
   const [isHovered, setIsHovered] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const ref = useRef<HTMLAnchorElement>(null);
+  const canHover = useHoverCapability();
 
   const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!canHover) return;
     if (!ref.current) return;
     const { clientX, clientY } = e;
     const { width, height, left, top } = ref.current.getBoundingClientRect();
@@ -40,6 +43,7 @@ const NavItem: React.FC<NavItemProps> = ({
   };
 
   const handleMouseEnter = () => {
+    if (!canHover) return;
     setIsHovered(true);
   };
 
@@ -73,9 +77,9 @@ const NavItem: React.FC<NavItemProps> = ({
         className={`w-1.5 h-1.5 rounded-full absolute -bottom-1 ${light ? 'bg-[#1c1d20]' : 'bg-white'}`}
         initial={{ scale: 0, opacity: 0 }}
         animate={{
-          scale: isHovered || isActive ? 1 : 0,
-          opacity: isHovered || isActive ? 1 : 0,
-          y: isHovered || isActive ? 0 : 4,
+          scale: (canHover && isHovered) || isActive ? 1 : 0,
+          opacity: (canHover && isHovered) || isActive ? 1 : 0,
+          y: (canHover && isHovered) || isActive ? 0 : 4,
         }}
         transition={{
           type: 'spring',

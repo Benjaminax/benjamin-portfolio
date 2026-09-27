@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import { useHoverCapability } from '../hooks/useHoverCapability';
 
 interface MagneticProps {
   children: React.ReactNode;
@@ -14,8 +15,10 @@ export const Magnetic: React.FC<MagneticProps> = ({
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const canHover = useHoverCapability();
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!canHover) return;
     if (!ref.current) return;
     const { clientX, clientY } = e;
     const { width, height, left, top } = ref.current.getBoundingClientRect();

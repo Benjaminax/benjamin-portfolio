@@ -2,12 +2,14 @@ import jwbCoreVideo from './assets/JWB CORE.web.mp4';
 import thirdPersonShooterVideo from './assets/Third Person Shooter.web.mp4';
 import theoraVideo from './assets/Theora.mp4';
 import paradoxNinjaVideo from './assets/The Paradox Ninja Game.MOV';
+import pdfXVideo from './assets/pdf x.mp4';
 import jwbCoreImage from './assets/JWB CORE.png';
 import thirdPersonShooterImage from './assets/Third person shooter .jpg';
 import theoraImage from './assets/Theora.png';
 import paradoxNinjaImage from './assets/Paradox ninja .png';
+import pdfXImage from './assets/pdf x.png';
 
-export type ProjectType = 'SaaS' | 'Desktop app' | 'Game development';
+export type ProjectType = 'SaaS' | 'Desktop app' | 'Game development' | 'Web app';
 
 export interface ProjectLink {
   label: string;
@@ -17,7 +19,7 @@ export interface ProjectLink {
 export interface Project {
   slug: string;
   title: string;
-  mark: '™' | '©';
+  mark: '™' | '©' | '';
   projectType: ProjectType;
   category: string;
   year: string;
@@ -119,7 +121,7 @@ export const projects: Project[] = [
       ],
     },
     video: theoraVideo,
-    color: '#e9e1f7',
+    color: '#f4cccc',
     links: [{ label: 'GitHub repository', url: 'https://github.com/Benjaminax/Theora' }],
   },
   {
@@ -207,6 +209,51 @@ export const projects: Project[] = [
     links: [
       { label: 'GitHub repository', url: 'https://github.com/Benjaminax/ninja-' },
       { label: 'Play on itch.io', url: 'https://benjaminax.itch.io/the-paradox-ninja' },
+    ],
+  },
+  {
+    slug: 'pdf-x',
+    title: 'PDF-X',
+    mark: '',
+    projectType: 'Web app',
+    category: 'Design & Development',
+    year: '2026',
+    tags: ['React', 'TypeScript', 'Tesseract.js', 'OCR', 'PDF tools', 'LaTeX'],
+    image: pdfXImage,
+    overview:
+      'A free, privacy-first PDF toolkit that runs in the browser, helping people merge and compress documents, extract text from scans, summarize long files, and convert LaTeX to PDF.',
+    caseStudy: {
+      title: 'Making everyday document work private and accessible.',
+      problemStatement:
+        'People in Ghana regularly need to merge documents, reduce file sizes, or extract text from scanned records. Paid software can be out of reach, while unfamiliar online converters may upload sensitive documents to third-party servers.',
+      sections: [
+        {
+          label: 'Research & direction',
+          description:
+            'PDF-X is shaped around common document tasks in government offices, universities, and businesses. The goal is to make useful PDF tools freely accessible without asking people to trade away control of their documents.',
+        },
+        {
+          label: 'Product design',
+          description:
+            'The toolkit brings document actions together in one place, including merging and compressing PDFs, extracting text from scanned pages, summarizing lengthy documents, and converting LaTeX files to PDF.',
+        },
+        {
+          label: 'Development',
+          description:
+            'Document processing runs in the browser rather than sending files to a third-party server. Tesseract.js performs OCR on the client, allowing scanned documents—including those without machine-readable text—to be processed locally.',
+        },
+        {
+          label: 'Result',
+          description:
+            'PDF-X provides a free, browser-based alternative for everyday document workflows, with a focus on privacy, local processing, and faster access to the information inside lengthy files.',
+        },
+      ],
+    },
+    video: pdfXVideo,
+    color: '#f3f1ed',
+    links: [
+      { label: 'Visit PDF-X', url: 'https://pdf-x-theta.vercel.app/' },
+      { label: 'GitHub repository', url: 'https://github.com/Benjaminax/PDF-X' },
     ],
   },
 ];

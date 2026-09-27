@@ -39,6 +39,7 @@ export const ProjectThumbnail: React.FC<ProjectThumbnailProps> = ({
   return (
     <div
       className={`relative overflow-hidden ${className}`}
+      style={{ filter: 'drop-shadow(0 16px 16px rgba(0, 0, 0, 0.28))' }}
       onPointerEnter={(event) => startPreview(event.pointerType)}
       onPointerLeave={stopPreview}
     >

@@ -6,11 +6,13 @@ import { Magnetic } from './Magnetic';
 interface FooterProps {
   animateHeadingOnScroll?: boolean;
   theme?: 'dark' | 'light';
+  profileImage?: string;
 }
 
 export const Footer: React.FC<FooterProps> = ({
   animateHeadingOnScroll = false,
   theme = 'dark',
+  profileImage = '/profile.png',
 }) => {
   const [time, setTime] = useState('');
   const isLight = theme === 'light';
@@ -64,11 +66,11 @@ export const Footer: React.FC<FooterProps> = ({
               }}
             >
               <span className="flex items-center gap-3 sm:gap-6 flex-wrap">
-                <span className={`w-10 h-10 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 inline-block align-middle shrink-0 shadow-2xl ${isLight ? 'border-black/10 bg-gray-200' : 'border-white/20 bg-gray-800'}`}>
+                <span className={`w-10 h-10 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 inline-block align-middle shrink-0 shadow-2xl ${isLight ? 'border-black/10 bg-gray-200' : 'border-white/20 bg-gray-500'}`}>
                   <img
-                    src="/profile.png"
+                    src={profileImage}
                     alt="Benjamin Acheampong"
-                    className="w-full h-full object-cover object-top"
+                    className="h-full w-full object-cover object-[50%_12%] [transform:translateY(30%)_scale(1.8)]"
                   />
                 </span>
                 <span>Let&apos;s work</span>

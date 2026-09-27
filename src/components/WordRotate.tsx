@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useHoverCapability } from '../hooks/useHoverCapability';
 
 interface WordRotateProps {
   word: string;
@@ -12,12 +13,15 @@ interface WordRotateProps {
  */
 export const WordRotate: React.FC<WordRotateProps> = ({ word, className = '' }) => {
   const [key, setKey] = useState(0);
+  const canHover = useHoverCapability();
 
   return (
     <span
       className={`relative inline-block overflow-hidden cursor-pointer ${className}`}
       style={{ verticalAlign: 'middle' }}
-      onMouseEnter={() => setKey((k) => k + 1)}
+      onMouseEnter={() => {
+        if (canHover) setKey((k) => k + 1);
+      }}
     >
       <AnimatePresence mode="wait" initial={false}>
         <motion.span

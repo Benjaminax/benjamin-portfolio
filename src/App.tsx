@@ -199,7 +199,7 @@ export function App() {
             </div>
             <div ref={experienceSectionRef} className="relative z-0 -mt-[360px] bg-[#141516]">
               <Experience />
-              <Footer />
+              <Footer profileImage="/profile2.png" />
             </div>
           </main>
         ) : (

@@ -53,7 +53,7 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ slug, onNa
                 style={{ fontFamily: "'Neue Helvetica Georgian 55 Roman', 'Helvetica Neue', Helvetica, sans-serif" }}
               >
                 {project.title}
-                <sup className="ml-1 text-[0.32em] align-super">{project.mark}</sup>
+                {project.mark && <sup className="ml-1 text-[0.32em] align-super">{project.mark}</sup>}
               </h1>
             </div>
             <div className="flex shrink-0 gap-10 text-sm sm:gap-14">
@@ -172,7 +172,8 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ slug, onNa
             <span>
               <span className="mb-3 block text-xs uppercase tracking-[0.2em] text-black/40">Next project</span>
               <span className="text-3xl tracking-[-0.05em] sm:text-5xl">
-                {nextProject.title}<sup className="ml-1 text-[0.4em] align-super">{nextProject.mark}</sup>
+                {nextProject.title}
+                {nextProject.mark && <sup className="ml-1 text-[0.4em] align-super">{nextProject.mark}</sup>}
               </span>
             </span>
             <span className="mb-1 flex h-12 w-12 items-center justify-center rounded-full border border-black/15 transition-colors group-hover:bg-[#1c1d20] group-hover:text-white">

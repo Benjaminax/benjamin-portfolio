@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Magnetic } from './Magnetic';
+import { useHoverCapability } from '../hooks/useHoverCapability';
 
 interface FloatingHamburgerProps {
   isOpen: boolean;
@@ -11,6 +12,7 @@ interface FloatingHamburgerProps {
 export const FloatingHamburger: React.FC<FloatingHamburgerProps> = ({ isOpen, onToggle, isLoading = false }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const canHover = useHoverCapability();
 
   // On mobile: always show (it's the only nav control).
   // On desktop: show only after scrolling past the navbar.
@@ -42,7 +44,9 @@ export const FloatingHamburger: React.FC<FloatingHamburgerProps> = ({ isOpen, on
               exit={{ scale: 0, opacity: 0 }}
               transition={{ type: 'spring', stiffness: 480, damping: 22, mass: 0.7 }}
               onClick={onToggle}
-              onMouseEnter={() => setIsHovered(true)}
+              onMouseEnter={() => {
+                if (canHover) setIsHovered(true);
+              }}
               onMouseLeave={() => setIsHovered(false)}
               className="w-16 h-16 rounded-full flex flex-col items-center justify-center cursor-pointer relative border border-white/15 overflow-hidden shadow-xl"
               style={{
@@ -50,7 +54,7 @@ export const FloatingHamburger: React.FC<FloatingHamburgerProps> = ({ isOpen, on
                 transition: 'background 0.3s cubic-bezier(0.76,0,0.24,1)',
               }}
               aria-label={isOpen ? 'Close menu' : 'Open menu'}
-              whileHover={{ scale: 1.12 }}
+              whileHover={canHover ? { scale: 1.12 } : undefined}
               whileTap={{ scale: 0.92 }}
             >
               {/* top line */}

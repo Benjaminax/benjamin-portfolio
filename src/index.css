@@ -91,10 +91,6 @@ body {
   transition: border-color 300ms ease;
 }
 
-.contact-hover-button:hover {
-  border-color: rgba(255, 255, 255, 0.35);
-}
-
 .contact-hover-button-bg {
   position: absolute;
   z-index: 0;
@@ -136,10 +132,6 @@ body {
   transition-delay: 0.2s;
 }
 
-.contact-hover-button:hover .contact-hover-button-layer {
-  transform: scale(1);
-}
-
 .contact-hover-button-inner {
   position: relative;
   z-index: 1;
@@ -155,16 +147,30 @@ body {
   transform: translateY(100%) scale(0);
 }
 
-.about-button.has-hovered:hover .about-button-layer {
-  animation: about-button-enter 1.3s cubic-bezier(0.19, 1, 0.22, 1) var(--about-button-delay, 0s) forwards;
-}
+@media (any-hover: hover) and (any-pointer: fine) {
+  .contact-hover-button:hover {
+    border-color: rgba(255, 255, 255, 0.35);
+  }
 
-.about-button.has-hovered:not(:hover) .about-button-layer {
-  animation: about-button-exit 1.3s cubic-bezier(0.19, 1, 0.22, 1) forwards;
-}
+  .contact-hover-button:hover .contact-hover-button-layer {
+    transform: scale(1);
+  }
 
-.about-button.has-hovered:hover {
-  background-color: #a374ff;
+  .about-button.has-hovered:hover .about-button-layer {
+    animation: about-button-enter 1.3s cubic-bezier(0.19, 1, 0.22, 1) var(--about-button-delay, 0s) forwards;
+  }
+
+  .about-button.has-hovered:not(:hover) .about-button-layer {
+    animation: about-button-exit 1.3s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  }
+
+  .about-button.has-hovered:hover {
+    background-color: #a374ff;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3d4047;
+  }
 }
 
 @keyframes about-button-enter {
@@ -196,10 +202,6 @@ body {
   background: #2a2c31;
   border-radius: 4px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #3d4047;
-}
-
 @keyframes ripple {
   0% {
     transform: translate(-50%, -50%) scale(0);

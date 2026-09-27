@@ -147,7 +147,7 @@ export const Hero: React.FC<HeroProps> = () => {
                       h-[105vh] sm:h-[105vh] md:h-[100vh] lg:h-[96vh]
                       flex items-end justify-center overflow-visible">
         <motion.img
-          src="/profile.png"
+          src="/profile2.png"
           alt="Benjamin Acheampong"
           initial={{ y: '22%', scale: 1.08 }}
           animate={{ y: '0%', scale: 1 }}

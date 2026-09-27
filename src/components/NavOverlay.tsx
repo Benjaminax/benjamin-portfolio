@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useHoverCapability } from '../hooks/useHoverCapability';
 
 interface NavOverlayProps {
   isOpen: boolean;
@@ -20,6 +21,7 @@ const FONT: React.CSSProperties = {
 };
 
 export const NavOverlay: React.FC<NavOverlayProps> = ({ isOpen, onClose, onNavigate }) => {
+  const canHover = useHoverCapability();
   const [dim, setDim] = useState({
     w: typeof window !== 'undefined' ? window.innerWidth  : 0,
     h: typeof window !== 'undefined' ? window.innerHeight : 0,
@@ -118,7 +120,7 @@ export const NavOverlay: React.FC<NavOverlayProps> = ({ isOpen, onClose, onNavig
                   animate={{ x: 0, opacity: 1 }}
                   exit={{ x: 60, opacity: 0 }}
                   transition={{ delay: 0.2 + i * 0.07, duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
-                  whileHover={{ x: 10 }}
+                  whileHover={canHover ? { x: 10 } : undefined}
                 >
                   <span className="w-2.5 h-2.5 rounded-full bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 shrink-0" />
                   {link.label}

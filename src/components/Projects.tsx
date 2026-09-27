@@ -2,9 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { Magnetic } from './Magnetic';
-import { projects } from './projectData';
+import { projects, type Project } from './projectData';
 import { ProjectThumbnail } from './ProjectThumbnail';
+import { useHoverCapability } from '../hooks/useHoverCapability';
 
+const featuredProjects = projects.slice(0, 4);
 const EDGE_HEIGHT = 200;
 const EXPERIENCE_REVEAL_DISTANCE = 360;
 const CURVE_AMPLITUDE_RATIO = 0.1;
@@ -17,10 +19,10 @@ interface ProjectsProps {
   onNavigate: (href: string, label: string) => void;
 }
 
-const ProjectTitle: React.FC<{ title: string; mark: '™' | '©' }> = ({ title, mark }) => (
+const ProjectTitle: React.FC<{ title: string; mark: Project['mark'] }> = ({ title, mark }) => (
   <>
     {title}
-    <sup className="ml-0.5 text-[0.45em] align-super tracking-normal">{mark}</sup>
+    {mark && <sup className="ml-0.5 text-[0.45em] align-super tracking-normal">{mark}</sup>}
   </>
 );
 
@@ -46,6 +48,7 @@ export const Projects: React.FC<ProjectsProps> = ({
   onNavigate,
 }) => {
   const [modal, setModal] = useState({ active: false, index: 0 });
+  const canHover = useHoverCapability();
   const modalContainer = useRef<HTMLDivElement>(null);
   const cursor = useRef<HTMLDivElement>(null);
   const previewVideos = useRef<(HTMLVideoElement | null)[]>([]);
@@ -211,7 +214,7 @@ export const Projects: React.FC<ProjectsProps> = ({
 
       {/* ── Mobile layout: visible square cards with centered rectangle video ── */}
       <div className="md:hidden flex flex-col gap-14 sm:gap-16">
-        {projects.map((project, idx) => (
+        {featuredProjects.map((project, idx) => (
           <a
             key={idx}
             href="/work"
@@ -259,7 +262,7 @@ export const Projects: React.FC<ProjectsProps> = ({
         className="hidden md:flex w-full flex-col divide-y divide-black/10 border-t border-b border-black/10"
         onMouseLeave={pauseProjectPreviews}
       >
-        {projects.map((project, idx) => (
+        {featuredProjects.map((project, idx) => (
           <a
             key={idx}
             href="/work"
@@ -267,9 +270,11 @@ export const Projects: React.FC<ProjectsProps> = ({
               event.preventDefault();
               onProjectClick(project.title);
             }}
-            onMouseEnter={() => playProjectPreview(idx)}
+            onMouseEnter={() => {
+              if (canHover) playProjectPreview(idx);
+            }}
             onMouseMove={() => {
-              if (!modal.active || modal.index !== idx) playProjectPreview(idx);
+              if (canHover && (!modal.active || modal.index !== idx)) playProjectPreview(idx);
             }}
             className="group py-10 sm:py-14 flex items-center justify-between transition-all duration-500 cursor-pointer select-none text-inherit no-underline"
           >
@@ -312,7 +317,7 @@ export const Projects: React.FC<ProjectsProps> = ({
           className="w-full h-full relative transition-transform duration-[850ms] ease-[cubic-bezier(0.76,0,0.24,1)] will-change-transform"
           style={{ transform: `translateY(-${modal.index * 100}%)` }}
         >
-          {projects.map((project, idx) => (
+          {featuredProjects.map((project, idx) => (
             <div
               key={idx}
               className="w-full h-full flex items-center justify-center p-6 sm:p-8"
