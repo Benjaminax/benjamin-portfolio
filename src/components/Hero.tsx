@@ -88,7 +88,7 @@ export const Hero: React.FC<HeroProps> = () => {
   const marqueeText = 'Benjamin Acheampong\u00A0–\u00A0'.repeat(4);
 
   return (
-    <section className="relative h-screen min-h-[640px] w-full overflow-hidden flex flex-col justify-between bg-[#999d9e] select-none">
+    <section className="relative h-screen min-h-[620px] md:min-h-[760px] lg:min-h-[640px] w-full overflow-hidden flex flex-col justify-between bg-[#999d9e] select-none">
 
       {/* ── Clock — large desktop only ───────────────────────────── */}
       <div className="hidden xl:block absolute left-14 top-32 z-30 pointer-events-auto">
@@ -112,49 +112,48 @@ export const Hero: React.FC<HeroProps> = () => {
       </div>
 
       {/* ── Location badge — tablet & desktop ──────────────────── */}
-      <div className="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 z-30 pointer-events-auto">
-        <div className="rounded-r-full bg-[#1c1d20] flex items-center pl-6 lg:pl-10 pr-3 lg:pr-3.5 py-3 lg:py-3.5 gap-4 lg:gap-6 shadow-2xl">
+      <div className="hidden md:block absolute left-0 top-[52%] -translate-y-1/2 z-30 pointer-events-auto lg:top-1/2">
+        <div className="rounded-r-full bg-[#1c1d20] flex items-center pl-5 pr-3 py-3 gap-3 shadow-2xl md:pl-5 md:pr-2.5 md:gap-3 lg:pl-6 lg:pr-3.5 lg:gap-4 lg:py-3.5">
           <div className="flex flex-col text-white"
             style={{ fontFamily: "'Neue Montreal', 'Helvetica Neue', sans-serif", fontSize: '16px', fontWeight: 450, lineHeight: 1.2, letterSpacing: '-0.02em' }}>
             <span>Located</span><span>in Accra,</span><span>Ghana</span>
           </div>
           <motion.div animate={{ x: [-4, 4, -4], y: [-4, 4, -4] }}
             transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="w-16 h-16 lg:w-20 lg:h-20 rounded-full bg-[#999d9e] flex items-center justify-center shrink-0 shadow-inner">
-            <Globe3D size={52} color="#ffffff" speed={0.016} />
+            className="w-14 h-14 rounded-full bg-[#999d9e] flex items-center justify-center shrink-0 shadow-inner md:w-16 md:h-16 lg:w-20 lg:h-20">
+            <Globe3D size={48} color="#ffffff" speed={0.016} />
           </motion.div>
         </div>
       </div>
 
       {/* ── Job title — tablet & desktop right-aligned ─────────── */}
-      <div className="hidden md:block absolute right-6 md:right-10 lg:right-[10%] xl:right-[14%] top-1/2 -translate-y-1/2 z-30 text-white">
-        <div className="mb-4 lg:mb-6">
-          <svg className="w-8 h-8 lg:w-11 lg:h-11" viewBox="0 0 24 24" fill="none"
+      <div className="hidden md:block absolute right-4 top-[52%] -translate-y-1/2 z-30 text-white md:right-6 lg:right-[10%] xl:right-[14%] lg:top-1/2">
+        <div className="mb-3 lg:mb-6">
+          <svg className="w-7 h-7 lg:w-11 lg:h-11" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
             <line x1="7" y1="7" x2="17" y2="17" /><polyline points="17 7 17 17 7 17" />
           </svg>
         </div>
-        <div className="text-xl md:text-2xl lg:text-3xl xl:text-[38px] font-normal leading-[1.2] tracking-tight"
+        <div className="text-lg md:text-2xl lg:text-3xl xl:text-[38px] font-normal leading-[1.2] tracking-tight"
           style={{ fontFamily: "'Neue Montreal', 'Helvetica Neue', Helvetica, sans-serif" }}>
           <p className="m-0">Software Engineer</p>
           <p className="m-0">&amp; Systems Developer</p>
         </div>
       </div>
 
-      {/* Profile image — HUGE close-up on mobile & iPad, proportional on desktop */}
+      {/* Profile image — responsive for mobile, tablet, and desktop */}
       <div className="absolute bottom-0 z-10 pointer-events-none
-                      left-1/2 -translate-x-1/2 translate-y-12 sm:translate-y-14 md:translate-y-12 lg:translate-y-0
-                      h-[105vh] sm:h-[105vh] md:h-[100vh] lg:h-[96vh]
-                      flex items-end justify-center overflow-visible">
+                      left-1/2 -translate-x-1/2 translate-y-12 sm:translate-y-14 md:translate-y-8 lg:translate-y-0
+                      h-[100vh] w-full sm:h-[104vh] md:h-[86vh] lg:h-[96vh]
+                      flex items-end justify-center overflow-hidden">
         <motion.img
           src="/profile2.png"
           alt="Benjamin Acheampong"
           initial={{ y: '22%', scale: 1.08 }}
           animate={{ y: '0%', scale: 1 }}
           transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1], delay: 0.25 }}
-          className="h-full w-auto min-w-[145vw] sm:min-w-[125vw] md:min-w-[110vw] lg:min-w-0
-                     scale-[1.42] sm:scale-[1.32] md:scale-[1.28] lg:scale-100
-                     object-contain object-bottom select-none origin-bottom"
+          className="h-full w-[150vw] max-w-none object-contain object-bottom select-none origin-bottom
+                     scale-[1.42] sm:w-[130vw] sm:scale-[1.28] md:w-[120vw] md:scale-[1.12] lg:w-auto lg:min-w-0 lg:scale-100"
         />
       </div>
 
@@ -181,7 +180,7 @@ export const Hero: React.FC<HeroProps> = () => {
       {/* ── Marquee ────────────────────────────────────────────── */}
       <div
         ref={sliderContainerRef}
-        className="absolute bottom-[16%] sm:bottom-[14%] md:bottom-6 lg:bottom-8 left-0 w-full
+        className="absolute bottom-[18%] sm:bottom-[14%] md:bottom-[12%] lg:bottom-8 left-0 w-full
                    overflow-hidden pointer-events-none z-20 whitespace-nowrap py-2 md:py-4"
       >
         <div className="flex whitespace-nowrap will-change-transform select-none">
