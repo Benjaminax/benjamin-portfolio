@@ -4,14 +4,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface NavOverlayProps {
   isOpen: boolean;
   onClose: () => void;
+  onNavigate: (href: string, label: string) => void;
 }
 
 const NAV_LINKS = [
-  { label: 'Home',       href: '#'          },
-  { label: 'Work',       href: '#projects'   },
-  { label: 'About',      href: '#about'     },
-  { label: 'Experience', href: '#experience'},
-  { label: 'Contact',    href: '#contact'   },
+  { label: 'Home',       href: '/'           },
+  { label: 'Work',       href: '/work'       },
+  { label: 'About',      href: '/about'      },
+  { label: 'Experience', href: '/experience' },
 ];
 
 const FONT: React.CSSProperties = {
@@ -19,7 +19,7 @@ const FONT: React.CSSProperties = {
     "'Neue Helvetica Georgian 55 Roman', 'Neue Helvetica Georgian', 'Helvetica Neue', Helvetica, sans-serif",
 };
 
-export const NavOverlay: React.FC<NavOverlayProps> = ({ isOpen, onClose }) => {
+export const NavOverlay: React.FC<NavOverlayProps> = ({ isOpen, onClose, onNavigate }) => {
   const [dim, setDim] = useState({
     w: typeof window !== 'undefined' ? window.innerWidth  : 0,
     h: typeof window !== 'undefined' ? window.innerHeight : 0,
@@ -32,15 +32,41 @@ export const NavOverlay: React.FC<NavOverlayProps> = ({ isOpen, onClose }) => {
     return () => window.removeEventListener('resize', update);
   }, []);
 
-  // prevent body scrolling when nav is open
+  // Seamless, zero-glitch background scroll lock
   useEffect(() => {
-    document.body.style.overflow = isOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    if (!isOpen) return;
+
+    const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+    const prevBodyOverflow = document.body.style.overflow;
+    const prevHtmlOverflow = document.documentElement.style.overflow;
+    const prevBodyPaddingRight = document.body.style.paddingRight;
+
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    if (scrollBarWidth > 0) {
+      document.body.style.paddingRight = `${scrollBarWidth}px`;
+    }
+
+    const preventTouch = (e: TouchEvent) => {
+      if (!(e.target as HTMLElement).closest('.nav-overlay-content')) {
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener('touchmove', preventTouch, { passive: false });
+
+    return () => {
+      document.body.style.overflow = prevBodyOverflow;
+      document.documentElement.style.overflow = prevHtmlOverflow;
+      document.body.style.paddingRight = prevBodyPaddingRight;
+      window.removeEventListener('touchmove', preventTouch);
+    };
   }, [isOpen]);
 
   const H = dim.h;
-  const panelW = Math.min(dim.w * 0.65, 580);
-  const bulge = 120;
+  const isMobile = dim.w < 768;
+  const panelW = isMobile ? dim.w : Math.min(dim.w * 0.65, 580);
+  const bulge = isMobile ? 60 : 120;
 
   // svg curve math for side drawer exit/enter
   const clippedPath  = `path('M${bulge},0 Q0,${H * 0.5} ${bulge},${H} L${panelW},${H} L${panelW},0 Z')`;
@@ -60,9 +86,9 @@ export const NavOverlay: React.FC<NavOverlayProps> = ({ isOpen, onClose }) => {
             onClick={onClose}
           />
 
-          {/* side drawer container */}
+          {/* side drawer container — 100% width on mobile, panelW on desktop */}
           <motion.div
-            className="fixed top-0 right-0 h-screen bg-[#1c1d20] z-[70] flex flex-col px-12 py-10"
+            className="nav-overlay-content overscroll-contain fixed top-0 right-0 h-screen bg-[#1c1d20] z-[70] flex flex-col px-8 sm:px-12 py-8 sm:py-10"
             style={{ width: panelW }}
             initial={{ x: '100%', clipPath: clippedPath }}
             animate={{ x: '0%',   clipPath: straightPath }}
@@ -82,7 +108,10 @@ export const NavOverlay: React.FC<NavOverlayProps> = ({ isOpen, onClose }) => {
                 <motion.a
                   key={link.label}
                   href={link.href}
-                  onClick={onClose}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    onNavigate(link.href, link.label);
+                  }}
                   className="group flex items-center gap-4 text-white py-1.5 hover:opacity-70 transition-opacity"
                   style={{ ...FONT, fontSize: 'clamp(2.6rem, 6.5vw, 5rem)', fontWeight: 300, lineHeight: 1.1 }}
                   initial={{ x: 60, opacity: 0 }}
@@ -103,8 +132,20 @@ export const NavOverlay: React.FC<NavOverlayProps> = ({ isOpen, onClose }) => {
                 Socials
               </p>
               <div className="flex gap-5 text-white/50 text-sm" style={FONT}>
-                {['Twitter', 'Instagram', 'LinkedIn', 'GitHub'].map((s) => (
-                  <a key={s} href="#" className="hover:text-white transition-colors duration-200">{s}</a>
+                {[
+                  { name: 'GitHub', url: 'https://github.com/Benjaminax' },
+                  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/benjamin-acheampong-7274b12a1/' },
+                  { name: 'Instagram', url: 'https://www.instagram.com/_.benjamin.a._/' },
+                ].map((s) => (
+                  <a
+                    key={s.name}
+                    href={s.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-white transition-colors duration-200"
+                  >
+                    {s.name}
+                  </a>
                 ))}
               </div>
             </div>

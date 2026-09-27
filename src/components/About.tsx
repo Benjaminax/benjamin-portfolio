@@ -1,43 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Magnetic } from './Magnetic';
-import { ArrowUpRight } from 'lucide-react';
 
 const statementLines = [
-  'Helping brands thrive in the digital',
-  'world. Located in the United',
-  'Kingdom. Delivering tailor-made',
-  'digital designs and building',
-  'interactive websites from scratch.',
+  'Helping brands to stand out in the digital era.',
+  'Together we will set the new status quo. No',
+  'nonsense, always on the cutting edge.',
 ];
 
 const secondaryLines = [
-  'The combination of my passion for design,',
-  'code & interaction positions me in a unique',
-  'place in the web design world.',
+  'The combination of my passion',
+  'for design, code & interaction',
+  'positions me in a unique place in',
+  'the web design world.',
 ];
 
 const services = [
   {
     num: '01',
-    title: 'Design',
+    title: 'Backend & Systems',
     description:
-      'With a solid track record in designing websites and digital products, I deliver strong and user-friendly digital designs with crisp typographic balance.',
-    tags: ['UI/UX Design', 'Design Systems', 'Typography', 'Wireframing'],
+      'Designing high-throughput microservices, compliance verification engines, and scalable distributed architectures with rigorous testing and clean pipelines.',
+    tags: ['TypeScript & Node.js', 'Python & Go', 'REST & GraphQL', 'Docker & CI/CD'],
   },
   {
     num: '02',
-    title: 'Development',
+    title: 'Interactive Web & AI',
     description:
-      'I build accessible, responsive, scalable websites and interactive experiences from scratch with fluid animations, physics, and modern tech stacks.',
-    tags: ['React & Next.js', 'Creative Dev & WebGL', 'GSAP & Motion', 'Tailwind'],
+      'Engineering fast-paced interactive web applications, client-side WASM document tooling, state persistence engines, and LLM text analysis workflows.',
+    tags: ['React & Next.js', 'WASM & OCR', 'Framer Motion & GSAP', 'Tailwind CSS'],
   },
   {
     num: '03',
-    title: 'The Full Package',
+    title: 'Game Dev & Engines',
     description:
-      'A comprehensive digital presence from concept to production. Perfect for startups and visionary brands looking to make a lasting digital impact.',
-    tags: ['Art Direction', 'Prototyping', 'Performance', 'SEO & Strategy'],
+      'Architecting real-time simulation logic, hitscan line-trace mechanics, AI behavior trees, and GC-optimized object pooling in Unreal Engine and Unity.',
+    tags: ['Unreal Engine 5.7', 'C++ & Blueprints', 'Unity & C#', 'AI Behavior Trees'],
   },
 ];
 
@@ -62,11 +60,31 @@ const lineVariants = {
 };
 
 export const About: React.FC = () => {
+  const [hasHoveredAboutButton, setHasHoveredAboutButton] = useState(false);
+  const [aboutButtonLabelOffset, setAboutButtonLabelOffset] = useState({ x: 0, y: 0 });
+
+  // Inject button styles
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+      .animated-button {
+        font-family: 'Neue Montreal', 'Neue Helvetica Georgian 55 Roman', 'Helvetica Neue', Helvetica, sans-serif;
+        font-size: 1rem;
+        font-weight: 500;
+        letter-spacing: -0.02em;
+      }
+    `;
+    document.head.appendChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
   return (
-    <section id="about" className="py-28 px-6 sm:px-12 max-w-7xl mx-auto">
+    <section id="about" className="pt-12 pb-24 sm:pt-16 sm:pb-32 px-6 sm:px-12 max-w-7xl mx-auto">
       {/* line-by-line text reveal */}
       <motion.div
-        className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start mb-24"
+        className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start mb-24"
         initial="hidden"
         whileInView="show"
         viewport={{ once: false, amount: 0.15 }}
@@ -74,15 +92,15 @@ export const About: React.FC = () => {
       >
         <div className="lg:col-span-8">
           <h2
-            className="text-2xl sm:text-4xl md:text-5xl font-normal text-[#1c1d20] leading-[1.28] tracking-[-0.02em]"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] xl:text-[44px] font-normal text-[#1c1d20] leading-[1.3] tracking-[-0.02em]"
             style={{
               fontFamily:
-                "'Neue Helvetica Georgian 55 Roman', 'Neue Helvetica Georgian', 'Helvetica Neue', Helvetica, 'Plus Jakarta Sans', Arial, sans-serif",
+                "'Neue Montreal', 'Neue Helvetica Georgian 55 Roman', 'Helvetica Neue', Helvetica, sans-serif",
             }}
           >
             {statementLines.map((line, i) => (
-              <span key={i} className="block overflow-hidden py-1">
-                <motion.span className="block" variants={lineVariants}>
+              <span key={i} className="block overflow-hidden py-0.5">
+                <motion.span className="block whitespace-normal lg:whitespace-nowrap" variants={lineVariants}>
                   {line}
                 </motion.span>
               </span>
@@ -90,11 +108,17 @@ export const About: React.FC = () => {
           </h2>
         </div>
 
-        <div className="lg:col-span-4 flex flex-col justify-between h-full pt-2">
-          <p className="text-base sm:text-lg text-gray-600 font-light leading-relaxed mb-10">
+        <div className="lg:col-span-4 flex flex-col justify-between h-full pt-1.5">
+          <p
+            className="text-base sm:text-lg text-[#1c1d20]/80 font-normal leading-[1.5] tracking-tight mb-8 sm:mb-10"
+            style={{
+              fontFamily:
+                "'Neue Montreal', 'Neue Helvetica Georgian 55 Roman', 'Helvetica Neue', Helvetica, sans-serif",
+            }}
+          >
             {secondaryLines.map((line, i) => (
               <span key={i} className="block overflow-hidden py-0.5">
-                <motion.span className="block" variants={lineVariants}>
+                <motion.span className="block whitespace-pre-line" variants={lineVariants}>
                   {line}
                 </motion.span>
               </span>
@@ -102,7 +126,7 @@ export const About: React.FC = () => {
           </p>
 
           <motion.div
-            className="self-start sm:self-auto"
+            className="self-end sm:self-auto"
             variants={{
               hidden: { scale: 0.2, opacity: 0 },
               show: {
@@ -115,12 +139,34 @@ export const About: React.FC = () => {
             <Magnetic strength={0.35}>
               <a
                 href="#contact"
-                className="w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-[#1c1d20] border border-black/10 text-white flex flex-col items-center justify-center gap-1 group hover:bg-[#455ce9] hover:border-[#455ce9] transition-all duration-500 shadow-xl cursor-pointer select-none"
+                onPointerEnter={() => setHasHoveredAboutButton(true)}
+                onPointerMove={(event: React.PointerEvent<HTMLAnchorElement>) => {
+                  if (event.pointerType !== 'mouse') return;
+
+                  const bounds = event.currentTarget.getBoundingClientRect();
+                  setAboutButtonLabelOffset({
+                    x: ((event.clientX - bounds.left) / bounds.width - 0.5) * 16,
+                    y: ((event.clientY - bounds.top) / bounds.height - 0.5) * 16,
+                  });
+                }}
+                onPointerLeave={() => setAboutButtonLabelOffset({ x: 0, y: 0 })}
+                className={`animated-button relative w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-[#1c1d20] text-white flex items-center justify-center shadow-xl cursor-pointer select-none overflow-hidden group about-button${hasHoveredAboutButton ? ' has-hovered' : ''}`}
               >
-                <span className="text-base font-normal tracking-tight group-hover:scale-105 transition-transform duration-300">
+                <span className="button-bg absolute top-0 left-0 w-full h-full rounded-full overflow-hidden">
+                  <span className="button-bg-layers absolute left-1/2 top-1/2 aspect-square w-[240%] -translate-x-1/2 -translate-y-1/2">
+                    <span className="about-button-layer about-button-layer-1 bg-[#a374ff] rounded-full absolute top-0 left-0 w-full h-full" />
+                  </span>
+                </span>
+                <span
+                  className="relative z-10 text-base font-normal tracking-tight transition-transform duration-150 ease-out"
+                  style={{
+                    transform: `translate(${aboutButtonLabelOffset.x}px, ${aboutButtonLabelOffset.y}px)`,
+                    fontFamily:
+                      "'Neue Montreal', 'Neue Helvetica Georgian 55 Roman', 'Helvetica Neue', Helvetica, sans-serif",
+                  }}
+                >
                   About me
                 </span>
-                <ArrowUpRight className="w-4 h-4 opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" />
               </a>
             </Magnetic>
           </motion.div>

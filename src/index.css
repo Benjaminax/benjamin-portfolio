@@ -38,13 +38,19 @@
   --color-canvas-border: #2c2e33;
 }
 
-html, body {
+html {
+  overflow-x: clip;
+  overflow-y: auto;
+}
+
+body {
   margin: 0;
   padding: 0;
   background-color: #141516;
   color: #ffffff;
   font-family: var(--font-helvetica);
-  overflow-x: hidden;
+  overflow-x: clip;
+  overflow-y: visible;
   width: 100%;
 }
 
@@ -63,6 +69,120 @@ html, body {
 
 .font-neue-montreal {
   font-family: 'Neue Montreal', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, sans-serif;
+}
+
+.contact-hover-button {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  justify-content: center;
+  min-height: 5rem;
+  min-width: 15rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+  padding: 1rem 2rem;
+  background: #1c1d20;
+  color: #f4f4f5;
+  font-size: 0.875rem;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  transition: border-color 300ms ease;
+}
+
+.contact-hover-button:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.contact-hover-button-bg {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.contact-hover-button-layers {
+  position: absolute;
+  top: -60%;
+  left: 50%;
+  width: max(200%, 10rem);
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+}
+
+.contact-hover-button-layer {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  transform: scale(0);
+  transition:
+    transform 1.3s cubic-bezier(0.19, 1, 0.22, 1),
+    opacity 0.3s linear;
+}
+
+.contact-hover-button-layer-purple {
+  background: #455ce9;
+}
+
+.contact-hover-button-layer-turquoise {
+  background: #455ce9;
+  transition-delay: 0.1s;
+}
+
+.contact-hover-button-layer-yellow {
+  background: #455ce9;
+  transition-delay: 0.2s;
+}
+
+.contact-hover-button:hover .contact-hover-button-layer {
+  transform: scale(1);
+}
+
+.contact-hover-button-inner {
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+.contact-hover-button-label {
+  display: block;
+  white-space: nowrap;
+}
+
+.about-button-layer {
+  transform: translateY(100%) scale(0);
+}
+
+.about-button.has-hovered:hover .about-button-layer {
+  animation: about-button-enter 1.3s cubic-bezier(0.19, 1, 0.22, 1) var(--about-button-delay, 0s) forwards;
+}
+
+.about-button.has-hovered:not(:hover) .about-button-layer {
+  animation: about-button-exit 1.3s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+.about-button.has-hovered:hover {
+  background-color: #a374ff;
+}
+
+@keyframes about-button-enter {
+  from {
+    transform: translateY(100%) scale(0);
+  }
+  to {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes about-button-exit {
+  from {
+    transform: translateY(0) scale(1);
+  }
+  to {
+    transform: translateY(-100%) scale(0);
+  }
 }
 
 /* Smooth custom scrollbars */
@@ -90,4 +210,3 @@ html, body {
     opacity: 0;
   }
 }
-

@@ -16,8 +16,7 @@ export const FloatingHamburger: React.FC<FloatingHamburgerProps> = ({ isOpen, on
   // On desktop: show only after scrolling past the navbar.
   useEffect(() => {
     const checkScroll = () => {
-      const isMobile = window.innerWidth < 768;
-      setShowMenu(isMobile || window.scrollY > 60);
+      setShowMenu(window.scrollY > 60);
     };
 
     checkScroll();

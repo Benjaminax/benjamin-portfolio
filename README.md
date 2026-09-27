@@ -8,8 +8,8 @@ A modern, high-performance personal portfolio built for a creative developer & d
 
 ### 1. Hero / Introduction
 - **Interactive 3D Globe**: Custom Canvas-rendered 3D interactive globe badge.
-- **Apple-Style Live London Clock**: Live GMT clock capsule displaying time in London.
-- **Bidirectional GSAP Marquee**: Infinite running marquee (`Jayden Smith —`) with scroll-velocity acceleration and direction switching.
+- **Apple-Style Live Ghana Clock**: Live GMT clock capsule displaying local time in Ghana.
+- **Bidirectional GSAP Marquee**: Infinite running marquee (`Benjamin Acheampong —`) with scroll-velocity acceleration and direction switching.
 - **Call To Actions**: Magnetic buttons for "View My Work" and "Contact Me".
 
 ### 2. About Me & Capabilities

@@ -1,20 +1,43 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Preloader } from './components/Preloader';
+import {
+  NAVIGATION_COVER_DURATION,
+  Preloader,
+} from './components/Preloader';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Projects } from './components/Projects';
 import { About } from './components/About';
 import { Experience } from './components/Experience';
-
 import { Footer } from './components/Footer';
 import { NavOverlay } from './components/NavOverlay';
 import { FloatingHamburger } from './components/FloatingHamburger';
+import { RoutePage, type SitePage } from './components/RoutePage';
+
+const pageFromPath = (pathname: string): SitePage => {
+  const path = pathname.replace(/\/+$/, '') || '/';
+  if (path === '/work') return 'work';
+  if (path === '/about') return 'about';
+  if (path === '/experience') return 'experience';
+  if (path === '/contact') return 'contact';
+  return 'home';
+};
+
+const PAGE_SPLASH_LABELS: Record<Exclude<SitePage, 'home'>, string> = {
+  work: 'Work',
+  about: 'About',
+  experience: 'Experience',
+  contact: 'Contact',
+};
 
 export function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [preloaderKey, setPreloaderKey] = useState(0);
+  const [page, setPage] = useState<SitePage>(() => pageFromPath(window.location.pathname));
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [navigation, setNavigation] = useState<{ key: number; label: string } | null>(null);
+  const navigationKey = useRef(0);
+  const navigationTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const experienceSectionRef = useRef<HTMLDivElement>(null);
 
   // intro splash screen timing
   useEffect(() => {
@@ -25,20 +48,88 @@ export function App() {
     }, 2350);
 
     return () => clearTimeout(timer);
-  }, [preloaderKey]);
-
-  // restart intro when user clicks brand logo
-  const handleReplayIntro = useCallback(() => {
-    setIsMenuOpen(false);
-    setIsLoading(true);
-    setPreloaderKey((prev) => prev + 1);
   }, []);
+
+  const handleNavigate = useCallback((href: string, label: string) => {
+    setIsMenuOpen(false);
+    if (navigationTimer.current) clearTimeout(navigationTimer.current);
+
+    navigationKey.current += 1;
+    setNavigation({ key: navigationKey.current, label });
+
+    navigationTimer.current = setTimeout(() => {
+      if (href.startsWith('/')) {
+        window.history.pushState({}, '', href);
+        setPage(pageFromPath(href));
+        window.scrollTo({ top: 0, behavior: 'auto' });
+        return;
+      }
+
+      const target = href.startsWith('#')
+        ? document.getElementById(href.slice(1))
+        : null;
+
+      if (href.startsWith('#')) {
+        window.scrollTo({
+          top: target ? target.getBoundingClientRect().top + window.scrollY : 0,
+          behavior: 'auto',
+        });
+      }
+
+    }, NAVIGATION_COVER_DURATION);
+  }, []);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      if (navigationTimer.current) clearTimeout(navigationTimer.current);
+      setNavigation(null);
+      setPage(pageFromPath(window.location.pathname));
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const handleNavigationTransitionComplete = useCallback(() => {
+    if (navigationTimer.current) clearTimeout(navigationTimer.current);
+    setNavigation(null);
+  }, []);
+
+  useEffect(() => () => {
+    if (navigationTimer.current) clearTimeout(navigationTimer.current);
+  }, []);
+
+  useEffect(() => {
+    if (!navigation) return;
+
+    const finishNavigationWhenVisible = () => {
+      if (document.visibilityState !== 'visible') return;
+      if (navigationTimer.current) clearTimeout(navigationTimer.current);
+      setNavigation(null);
+    };
+
+    document.addEventListener('visibilitychange', finishNavigationWhenVisible);
+    return () => document.removeEventListener('visibilitychange', finishNavigationWhenVisible);
+  }, [navigation]);
 
   return (
     <div className="relative min-h-screen bg-[#141516] text-[#f4f4f5] selection:bg-white selection:text-black font-neue-helvetica">
       {/* intro preloader */}
       <AnimatePresence mode="wait">
-        {isLoading && <Preloader key={preloaderKey} />}
+        {isLoading ? (
+          <Preloader
+            key="intro"
+            label={page === 'home' ? undefined : PAGE_SPLASH_LABELS[page]}
+          />
+        ) : navigation ? (
+          <Preloader
+            key={`navigation-${navigation.key}`}
+            label={navigation.label}
+            isTransition
+            onTransitionComplete={handleNavigationTransitionComplete}
+          />
+        ) : null}
       </AnimatePresence>
 
       {/* menu button */}
@@ -49,7 +140,11 @@ export function App() {
       />
 
       {/* side navigation overlay */}
-      <NavOverlay isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
+      <NavOverlay
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+        onNavigate={handleNavigate}
+      />
 
       {/* main content smooth reveal */}
       <motion.div
@@ -63,25 +158,38 @@ export function App() {
           delay: isLoading ? 0 : 0.2,
         }}
       >
-        <Navbar onReplayIntro={handleReplayIntro} />
+        <Navbar
+          onToggleMenu={() => setIsMenuOpen((v) => !v)}
+          onNavigate={handleNavigate}
+          activeHref={page === 'home' ? undefined : `/${page}`}
+          light={page === 'work' || page === 'about'}
+        />
 
-        <main className="flex-grow relative z-10">
-          <Hero
-            onReplayIntro={handleReplayIntro}
-            onToggleMenu={() => setIsMenuOpen((v) => !v)}
-            isMenuOpen={isMenuOpen}
-          />
-          <div className="bg-white text-[#1c1d20] relative z-10">
-            <About />
-            <Projects />
-          </div>
-
-          <div className="text-[#1c1d20] relative">
-            <Experience />
-          </div>
-        </main>
-
-        <Footer onReplayIntro={handleReplayIntro} />
+        {page === 'home' ? (
+          <main className="flex-grow relative z-10">
+            <Hero />
+            <div className="text-[#1c1d20] relative z-10">
+              <div className="bg-white">
+                <About />
+              </div>
+              <Projects
+                experienceSectionRef={experienceSectionRef}
+                onProjectClick={(title) => handleNavigate('', title)}
+              />
+            </div>
+            <div ref={experienceSectionRef} className="relative z-0 -mt-[360px] bg-[#141516]">
+              <Experience />
+              <Footer />
+            </div>
+          </main>
+        ) : (
+          <main className="flex-grow relative z-10">
+            <RoutePage
+              page={page}
+              onProjectClick={(title) => handleNavigate('', title)}
+            />
+          </main>
+        )}
       </motion.div>
     </div>
   );
