@@ -9,6 +9,11 @@ import paradoxNinjaImage from './assets/Paradox ninja .png';
 
 export type ProjectType = 'SaaS' | 'Desktop app' | 'Game development';
 
+export interface ProjectLink {
+  label: string;
+  url: string;
+}
+
 export interface Project {
   slug: string;
   title: string;
@@ -29,7 +34,7 @@ export interface Project {
   };
   video?: string;
   color: string;
-  url: string;
+  links: ProjectLink[];
 }
 
 export const projects: Project[] = [
@@ -73,7 +78,7 @@ export const projects: Project[] = [
     },
     video: jwbCoreVideo,
     color: '#ffffff',
-    url: 'https://github.com/Benjaminax',
+    links: [{ label: 'GitHub repository', url: 'https://github.com/Benjaminax/jwb-core' }],
   },
   {
     slug: 'theora',
@@ -115,7 +120,7 @@ export const projects: Project[] = [
     },
     video: theoraVideo,
     color: '#e9e1f7',
-    url: 'https://github.com/Benjaminax',
+    links: [{ label: 'GitHub repository', url: 'https://github.com/Benjaminax/Theora' }],
   },
   {
     slug: 'third-person-shooter',
@@ -157,7 +162,7 @@ export const projects: Project[] = [
     },
     video: thirdPersonShooterVideo,
     color: '#343638',
-    url: 'https://github.com/Benjaminax',
+    links: [{ label: 'GitHub repository', url: 'https://github.com/Benjaminax/Third-Person-Game' }],
   },
   {
     slug: 'paradox-ninja-game',
@@ -199,7 +204,10 @@ export const projects: Project[] = [
     },
     video: paradoxNinjaVideo,
     color: '#1c1d20',
-    url: 'https://benjaminax.itch.io/the-paradox-ninja',
+    links: [
+      { label: 'GitHub repository', url: 'https://github.com/Benjaminax/ninja-' },
+      { label: 'Play on itch.io', url: 'https://benjaminax.itch.io/the-paradox-ninja' },
+    ],
   },
 ];
 

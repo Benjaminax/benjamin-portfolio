@@ -14,6 +14,7 @@ const MAX_CURVE_DEPTH = 144;
 interface ProjectsProps {
   experienceSectionRef: React.RefObject<HTMLDivElement | null>;
   onProjectClick: (title: string) => void;
+  onNavigate: (href: string, label: string) => void;
 }
 
 const ProjectTitle: React.FC<{ title: string; mark: '™' | '©' }> = ({ title, mark }) => (
@@ -39,7 +40,11 @@ const scaleAnimation = {
   },
 };
 
-export const Projects: React.FC<ProjectsProps> = ({ experienceSectionRef, onProjectClick }) => {
+export const Projects: React.FC<ProjectsProps> = ({
+  experienceSectionRef,
+  onProjectClick,
+  onNavigate,
+}) => {
   const [modal, setModal] = useState({ active: false, index: 0 });
   const modalContainer = useRef<HTMLDivElement>(null);
   const cursor = useRef<HTMLDivElement>(null);
@@ -377,10 +382,9 @@ export const Projects: React.FC<ProjectsProps> = ({ experienceSectionRef, onProj
       {/* More work button — exactly matching screenshot */}
       <div className="mt-16 sm:mt-24 flex justify-center">
         <Magnetic strength={0.35}>
-          <a
-            href="https://github.com/Benjaminax?tab=repositories"
-            target="_blank"
-            rel="noreferrer"
+          <button
+            type="button"
+            onClick={() => onNavigate('/work', 'Work')}
             className="px-9 py-4 sm:px-12 sm:py-5 rounded-full border border-black/20 bg-white text-[#1c1d20] hover:bg-[#1c1d20] hover:text-white hover:border-[#1c1d20] text-sm sm:text-base font-normal transition-all duration-400 inline-flex items-center gap-1.5 shadow-sm hover:shadow-xl cursor-pointer select-none"
             style={{
               fontFamily:
@@ -389,7 +393,7 @@ export const Projects: React.FC<ProjectsProps> = ({ experienceSectionRef, onProj
           >
             <span>More work</span>
             <sup className="text-[11px] text-gray-500 font-normal">7</sup>
-          </a>
+          </button>
         </Magnetic>
       </div>
     </section>

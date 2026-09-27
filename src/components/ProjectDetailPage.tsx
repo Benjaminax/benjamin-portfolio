@@ -99,15 +99,20 @@ export const ProjectDetailPage: React.FC<ProjectDetailPageProps> = ({ slug, onNa
               <p className="max-w-2xl text-lg leading-[1.65] tracking-[-0.02em] sm:text-2xl">
                 {project.overview}
               </p>
-              <a
-                href={project.url}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-8 inline-flex items-center gap-2 border-b border-black/25 pb-2 text-sm transition-colors hover:border-black"
-              >
-                View project links
-                <ArrowUpRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
-              </a>
+              <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3">
+                {project.links.map((link) => (
+                  <a
+                    key={link.url}
+                    href={link.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 border-b border-black/25 pb-2 text-sm transition-colors hover:border-black"
+                  >
+                    {link.label}
+                    <ArrowUpRight className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
+                  </a>
+                ))}
+              </div>
             </div>
           </section>
 

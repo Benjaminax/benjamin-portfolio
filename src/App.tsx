@@ -194,6 +194,7 @@ export function App() {
               <Projects
                 experienceSectionRef={experienceSectionRef}
                 onProjectClick={() => handleNavigate('/work', 'Work')}
+                onNavigate={handleNavigate}
               />
             </div>
             <div ref={experienceSectionRef} className="relative z-0 -mt-[360px] bg-[#141516]">
