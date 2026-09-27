@@ -92,7 +92,7 @@ const RoutePageHero: React.FC<CurvedPageHeroProps> = ({ page }) => {
 
   return (
     <section
-      className={`relative z-10 flex min-h-[78vh] flex-col justify-end px-6 pb-36 pt-40 sm:px-16 sm:pb-40 lg:px-24 ${content.align}`}
+      className={`relative z-10 flex min-h-[68vh] md:min-h-[72vh] lg:min-h-[78vh] flex-col justify-end px-6 pb-28 pt-32 sm:px-16 sm:pb-32 sm:pt-36 md:px-12 md:pb-36 md:pt-40 lg:px-24 ${content.align}`}
       style={{ backgroundColor: content.background, color: content.foreground }}
     >
       {page === 'experience' ? (
@@ -119,8 +119,8 @@ const RoutePageHero: React.FC<CurvedPageHeroProps> = ({ page }) => {
           >
             {content.title}
           </h1>
-          <div className={`mt-10 flex max-w-6xl flex-col gap-8 sm:flex-row sm:items-end sm:justify-between ${content.align}`}>
-            <p className="max-w-md text-base leading-relaxed opacity-80 sm:text-lg">
+          <div className={`mt-8 flex max-w-6xl flex-col gap-8 sm:flex-row sm:items-end sm:justify-between md:mt-10 ${content.align}`}>
+            <p className="max-w-md text-base leading-relaxed opacity-80 sm:text-lg md:text-[1.05rem]">
               {content.description}
             </p>
             <a

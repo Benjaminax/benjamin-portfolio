@@ -88,7 +88,7 @@ export const Hero: React.FC<HeroProps> = () => {
   const marqueeText = 'Benjamin Acheampong\u00A0–\u00A0'.repeat(4);
 
   return (
-    <section className="relative h-screen min-h-[620px] md:min-h-[760px] lg:min-h-[640px] w-full overflow-hidden flex flex-col justify-between bg-[#999d9e] select-none">
+    <section className="relative h-screen min-h-[620px] md:min-h-[760px] lg:min-h-[640px] w-full overflow-hidden flex flex-col justify-between bg-[#999d9e] select-none pt-[72px] sm:pt-[80px] md:pt-[86px] lg:pt-[72px]">
 
       {/* ── Clock — large desktop only ───────────────────────────── */}
       <div className="hidden xl:block absolute left-14 top-32 z-30 pointer-events-auto">
@@ -144,7 +144,9 @@ export const Hero: React.FC<HeroProps> = () => {
       {/* Profile image — responsive for mobile, tablet, and desktop */}
       <div className="absolute bottom-0 z-10 pointer-events-none
                       left-1/2 -translate-x-1/2 translate-y-12 sm:translate-y-14 md:translate-y-8 lg:translate-y-0
-                      h-[100vh] w-full sm:h-[104vh] md:h-[86vh] lg:h-[96vh]
+                      top-[74px] sm:top-[86px] md:top-[96px] lg:top-[72px]
+                      h-[calc(100vh-74px)] sm:h-[calc(100vh-86px)] md:h-[calc(100vh-96px)] lg:h-[calc(100vh-72px)]
+                      w-full sm:w-[130vw] md:w-[120vw] lg:w-full
                       flex items-end justify-center overflow-hidden">
         <motion.img
           src="/profile2.png"
