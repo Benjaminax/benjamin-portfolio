@@ -5,6 +5,7 @@ import { WorkIndexPage } from './WorkIndexPage';
 import { AboutRoutePage } from './AboutRoutePage';
 import { ScrollCurveDivider } from './ScrollCurveDivider';
 import { ProjectDetailPage } from './ProjectDetailPage';
+import experienceImage from './assets/exprerince .jpg';
 
 type StandardRoutePage = 'work' | 'about' | 'experience' | 'contact';
 export type SitePage = 'home' | StandardRoutePage | 'project';
@@ -44,7 +45,7 @@ const PAGE_CONTENT = {
   experience: {
     eyebrow: 'Career / 2024—Now',
     title: <>Built with<br />purpose.</>,
-    description: 'The teams, places, and systems that have shaped the way I work.',
+    description: 'From healthcare interfaces to financial technology and back, each chapter has taught me to make complex products clearer, more useful, and more dependable.',
     background: '#1c1d20',
     foreground: '#f4f4f5',
     accent: '#a374ff',
@@ -94,7 +95,18 @@ const RoutePageHero: React.FC<CurvedPageHeroProps> = ({ page }) => {
       className={`relative z-10 flex min-h-[78vh] flex-col justify-end px-6 pb-36 pt-40 sm:px-16 sm:pb-40 lg:px-24 ${content.align}`}
       style={{ backgroundColor: content.background, color: content.foreground }}
     >
-      <div className="pointer-events-none absolute -right-20 top-28 h-56 w-56 rounded-full border border-current/20 sm:right-[12%] sm:top-32 sm:h-80 sm:w-80" />
+      {page === 'experience' ? (
+        <div className="pointer-events-none absolute -right-10 top-24 h-72 w-72 overflow-hidden rounded-full border border-current/20 sm:right-[8%] sm:top-16 sm:h-[34rem] sm:w-[34rem]">
+          <img
+            src={experienceImage}
+            alt=""
+            aria-hidden="true"
+            className="h-full w-full object-cover"
+          />
+        </div>
+      ) : (
+        <div className="pointer-events-none absolute -right-20 top-28 h-56 w-56 rounded-full border border-current/20 sm:right-[12%] sm:top-32 sm:h-80 sm:w-80" />
+      )}
       <div className="relative z-10 mx-auto w-full max-w-5xl">
         <div className={`flex flex-col ${content.align} mx-auto w-full`}>
           <div className="mb-8 flex items-center gap-3 text-xs uppercase tracking-[0.24em] opacity-75">
@@ -163,17 +175,17 @@ export const RoutePage: React.FC<RoutePageProps> = ({
         <>
           <div className="relative z-10 bg-[#141516]">
             <div className="mx-auto w-full max-w-5xl pt-[180px]">
-              <Experience />
+              <Experience detailed />
             </div>
           </div>
           <div data-scroll-curve-container className="relative z-0">
-            <ScrollCurveDivider fromColor="#141516" toColor="#141516" />
+            <ScrollCurveDivider fromColor="#141516" toColor="#ffffff" />
             <div
-              className="relative z-0 -mt-[360px] bg-[#141516]"
+              className="relative z-0 -mt-[360px] bg-white"
               style={{ transform: 'translateY(var(--scroll-curve-reveal, 0px))' }}
             >
               <div className="mx-auto w-full max-w-7xl">
-                <Footer animateHeadingOnScroll />
+                <Footer animateHeadingOnScroll theme="light" />
               </div>
             </div>
           </div>
