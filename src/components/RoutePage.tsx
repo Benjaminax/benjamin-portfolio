@@ -4,12 +4,16 @@ import { Footer } from './Footer';
 import { WorkIndexPage } from './WorkIndexPage';
 import { AboutRoutePage } from './AboutRoutePage';
 import { ScrollCurveDivider } from './ScrollCurveDivider';
+import { ProjectDetailPage } from './ProjectDetailPage';
 
-export type SitePage = 'home' | 'work' | 'about' | 'experience' | 'contact';
+type StandardRoutePage = 'work' | 'about' | 'experience' | 'contact';
+export type SitePage = 'home' | StandardRoutePage | 'project';
 
 interface RoutePageProps {
   page: Exclude<SitePage, 'home'>;
+  projectSlug: string;
   onProjectClick: (title: string) => void;
+  onNavigate: (href: string, label: string) => void;
 }
 
 const PAGE_CONTENT = {
@@ -62,7 +66,7 @@ const PAGE_CONTENT = {
     align: 'items-end text-right',
   },
 } satisfies Record<
-  Exclude<SitePage, 'home'>,
+  StandardRoutePage,
   {
     eyebrow: string;
     title: React.ReactNode;
@@ -78,7 +82,7 @@ const PAGE_CONTENT = {
 >;
 
 interface CurvedPageHeroProps {
-  page: Exclude<SitePage, 'home'>;
+  page: StandardRoutePage;
 }
 
 const RoutePageHero: React.FC<CurvedPageHeroProps> = ({ page }) => {
@@ -121,7 +125,16 @@ const RoutePageHero: React.FC<CurvedPageHeroProps> = ({ page }) => {
   );
 };
 
-export const RoutePage: React.FC<RoutePageProps> = ({ page, onProjectClick }) => {
+export const RoutePage: React.FC<RoutePageProps> = ({
+  page,
+  projectSlug,
+  onProjectClick,
+  onNavigate,
+}) => {
+  if (page === 'project') {
+    return <ProjectDetailPage slug={projectSlug} onNavigate={onNavigate} />;
+  }
+
   if (page === 'about') return <AboutRoutePage />;
 
   if (page === 'work') {

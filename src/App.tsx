@@ -13,17 +13,22 @@ import { Footer } from './components/Footer';
 import { NavOverlay } from './components/NavOverlay';
 import { FloatingHamburger } from './components/FloatingHamburger';
 import { RoutePage, type SitePage } from './components/RoutePage';
+import { getProjectBySlug, getProjectPath } from './components/projectData';
 
 const pageFromPath = (pathname: string): SitePage => {
   const path = pathname.replace(/\/+$/, '') || '/';
   if (path === '/work') return 'work';
+  if (path.startsWith('/work/')) {
+    const slug = path.slice('/work/'.length);
+    return getProjectBySlug(slug) ? 'project' : 'work';
+  }
   if (path === '/about') return 'about';
   if (path === '/experience') return 'experience';
   if (path === '/contact') return 'contact';
   return 'home';
 };
 
-const PAGE_SPLASH_LABELS: Record<Exclude<SitePage, 'home'>, string> = {
+const PAGE_SPLASH_LABELS: Record<Exclude<SitePage, 'home' | 'project'>, string> = {
   work: 'Work',
   about: 'About',
   experience: 'Experience',
@@ -33,6 +38,10 @@ const PAGE_SPLASH_LABELS: Record<Exclude<SitePage, 'home'>, string> = {
 export function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState<SitePage>(() => pageFromPath(window.location.pathname));
+  const [projectSlug, setProjectSlug] = useState(() => {
+    const path = window.location.pathname.replace(/\/+$/, '');
+    return path.startsWith('/work/') ? path.slice('/work/'.length) : '';
+  });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [navigation, setNavigation] = useState<{ key: number; label: string } | null>(null);
   const navigationKey = useRef(0);
@@ -61,6 +70,8 @@ export function App() {
       if (href.startsWith('/')) {
         window.history.pushState({}, '', href);
         setPage(pageFromPath(href));
+        const path = href.replace(/\/+$/, '');
+        setProjectSlug(path.startsWith('/work/') ? path.slice('/work/'.length) : '');
         window.scrollTo({ top: 0, behavior: 'auto' });
         return;
       }
@@ -84,6 +95,8 @@ export function App() {
       if (navigationTimer.current) clearTimeout(navigationTimer.current);
       setNavigation(null);
       setPage(pageFromPath(window.location.pathname));
+      const path = window.location.pathname.replace(/\/+$/, '');
+      setProjectSlug(path.startsWith('/work/') ? path.slice('/work/'.length) : '');
       window.scrollTo({ top: 0, behavior: 'auto' });
     };
 
@@ -120,7 +133,13 @@ export function App() {
         {isLoading ? (
           <Preloader
             key="intro"
-            label={page === 'home' ? undefined : PAGE_SPLASH_LABELS[page]}
+            label={
+              page === 'home'
+                ? undefined
+                : page === 'project'
+                  ? getProjectBySlug(projectSlug)?.title
+                  : PAGE_SPLASH_LABELS[page]
+            }
           />
         ) : navigation ? (
           <Preloader
@@ -161,8 +180,8 @@ export function App() {
         <Navbar
           onToggleMenu={() => setIsMenuOpen((v) => !v)}
           onNavigate={handleNavigate}
-          activeHref={page === 'home' ? undefined : `/${page}`}
-          light={page === 'work' || page === 'about'}
+          activeHref={page === 'home' ? undefined : page === 'project' ? '/work' : `/${page}`}
+          light={page === 'work' || page === 'about' || page === 'project'}
         />
 
         {page === 'home' ? (
@@ -174,7 +193,7 @@ export function App() {
               </div>
               <Projects
                 experienceSectionRef={experienceSectionRef}
-                onProjectClick={(title) => handleNavigate('', title)}
+                onProjectClick={() => handleNavigate('/work', 'Work')}
               />
             </div>
             <div ref={experienceSectionRef} className="relative z-0 -mt-[360px] bg-[#141516]">
@@ -186,7 +205,9 @@ export function App() {
           <main className="flex-grow relative z-10">
             <RoutePage
               page={page}
-              onProjectClick={(title) => handleNavigate('', title)}
+              projectSlug={projectSlug}
+              onProjectClick={(title) => handleNavigate(getProjectPath(title), title)}
+              onNavigate={handleNavigate}
             />
           </main>
         )}

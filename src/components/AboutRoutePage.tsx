@@ -1,7 +1,8 @@
-import { ArrowDownRight } from 'lucide-react';
+import { ArrowDownRight, Download } from 'lucide-react';
 import { Footer } from './Footer';
 import { Globe3D } from './Globe3D';
 import { ScrollCurveDivider } from './ScrollCurveDivider';
+import resumePdf from './assets/Benjamin_Acheampong_SWE_Resume.pdf';
 
 export const AboutRoutePage: React.FC = () => {
   return (
@@ -11,7 +12,7 @@ export const AboutRoutePage: React.FC = () => {
           className="max-w-[720px] text-[clamp(2.75rem,8vw,6rem)] font-normal leading-[1.02] tracking-[-0.065em]"
           style={{ fontFamily: "'Neue Helvetica Georgian 55 Roman', 'Helvetica Neue', Helvetica, sans-serif" }}
         >
-          Helping brands thrive in the digital world
+          I build by questioning the obvious.
         </h1>
 
         <div className="relative mt-16 flex h-28 items-end border-t border-black/15 sm:mt-20 sm:h-36">
@@ -23,10 +24,19 @@ export const AboutRoutePage: React.FC = () => {
 
         <div className="mt-10 max-w-[560px] sm:mt-12">
           <p className="text-base leading-[1.6] tracking-[-0.02em] sm:text-lg">
-            I help companies from all over the world with tailor-made solutions. With each project, I
-            push my work to new horizons, always putting quality first.
+            I’m Benjamin. I’ve never been big on accepting things just because that’s how they’ve
+            always been done. I’d rather question it, figure it out, and do it my way. That’s pretty
+            much how I build.
           </p>
           <p className="mt-6 text-sm text-[#969696] sm:mt-7 sm:text-base">Always exploring</p>
+          <a
+            href={resumePdf}
+            download="Benjamin_Acheampong_SWE_Resume.pdf"
+            className="mt-8 inline-flex items-center gap-3 rounded-full border border-[#1c1d20]/20 px-5 py-3 text-sm transition-colors hover:border-[#1c1d20] hover:bg-[#1c1d20] hover:text-white"
+          >
+            Download résumé
+            <Download className="h-4 w-4" strokeWidth={1.5} aria-hidden="true" />
+          </a>
         </div>
 
         <div className="mt-12 flex aspect-[0.9] w-full items-end justify-center overflow-hidden bg-[#e8e8e6] sm:mt-16 sm:aspect-[1.7]">

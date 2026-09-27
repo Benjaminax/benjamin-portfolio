@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { Magnetic } from './Magnetic';
 import { projects } from './projectData';
+import { ProjectThumbnail } from './ProjectThumbnail';
 
 const EDGE_HEIGHT = 200;
 const EXPERIENCE_REVEAL_DISTANCE = 360;
@@ -15,12 +16,10 @@ interface ProjectsProps {
   onProjectClick: (title: string) => void;
 }
 
-const ProjectTitle: React.FC<{ title: string }> = ({ title }) => (
+const ProjectTitle: React.FC<{ title: string; mark: '™' | '©' }> = ({ title, mark }) => (
   <>
     {title}
-    {title === 'JWB CORE' && (
-      <sup className="ml-0.5 text-[0.45em] align-super tracking-normal">™</sup>
-    )}
+    <sup className="ml-0.5 text-[0.45em] align-super tracking-normal">{mark}</sup>
   </>
 );
 
@@ -44,10 +43,33 @@ export const Projects: React.FC<ProjectsProps> = ({ experienceSectionRef, onProj
   const [modal, setModal] = useState({ active: false, index: 0 });
   const modalContainer = useRef<HTMLDivElement>(null);
   const cursor = useRef<HTMLDivElement>(null);
+  const previewVideos = useRef<(HTMLVideoElement | null)[]>([]);
   const projectsRef = useRef<HTMLDivElement>(null);
   const transitionRef = useRef<HTMLDivElement>(null);
   const edgePathRef = useRef<SVGPathElement>(null);
   const edgeShadowPathRef = useRef<SVGPathElement>(null);
+
+  const playProjectPreview = (index: number) => {
+    setModal({ active: true, index });
+    previewVideos.current.forEach((video, videoIndex) => {
+      if (!video) return;
+      if (videoIndex !== index) {
+        video.pause();
+        return;
+      }
+
+      video.muted = true;
+      void video.play().catch((error: unknown) => {
+        if (error instanceof DOMException && error.name === 'AbortError') return;
+        console.error('Unable to play project hover preview.', error);
+      });
+    });
+  };
+
+  const pauseProjectPreviews = () => {
+    previewVideos.current.forEach((video) => video?.pause());
+    setModal((prev) => ({ ...prev, active: false }));
+  };
 
   useEffect(() => {
     const transition = transitionRef.current;
@@ -187,10 +209,11 @@ export const Projects: React.FC<ProjectsProps> = ({ experienceSectionRef, onProj
         {projects.map((project, idx) => (
           <a
             key={idx}
-            href={project.url}
-            target="_blank"
-            rel="noreferrer"
-            onClick={() => onProjectClick(project.title)}
+            href="/work"
+            onClick={(event) => {
+              event.preventDefault();
+              onProjectClick(project.title);
+            }}
             className="flex flex-col group text-inherit no-underline select-none"
           >
             {/* Square box with project background color and centered landscape rectangle video inside */}
@@ -198,18 +221,12 @@ export const Projects: React.FC<ProjectsProps> = ({ experienceSectionRef, onProj
               className="w-full aspect-square flex items-center justify-center p-6 sm:p-8 rounded-none overflow-hidden shadow-sm"
               style={{ backgroundColor: project.color }}
             >
-              {project.video && (
-                <div className="relative w-full aspect-[16/10] rounded-sm overflow-hidden bg-black shadow-xl">
-                  <video
-                    src={project.video}
-                    muted
-                    playsInline
-                    autoPlay
-                    loop
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
+              <ProjectThumbnail
+                image={project.image}
+                title={project.title}
+                video={project.video}
+                className="w-full aspect-[16/10] rounded-sm bg-black shadow-xl"
+              />
             </div>
 
             {/* Title */}
@@ -220,7 +237,7 @@ export const Projects: React.FC<ProjectsProps> = ({ experienceSectionRef, onProj
                   "'Neue Montreal', 'Neue Helvetica Georgian 55 Roman', 'Helvetica Neue', Helvetica, sans-serif",
               }}
             >
-              <ProjectTitle title={project.title} />
+              <ProjectTitle title={project.title} mark={project.mark} />
             </h3>
 
             {/* Divider line & details */}
@@ -235,17 +252,20 @@ export const Projects: React.FC<ProjectsProps> = ({ experienceSectionRef, onProj
       {/* ── Desktop layout: hover list rows with sliding modal ── */}
       <div
         className="hidden md:flex w-full flex-col divide-y divide-black/10 border-t border-b border-black/10"
-        onMouseLeave={() => setModal((prev) => ({ ...prev, active: false }))}
+        onMouseLeave={pauseProjectPreviews}
       >
         {projects.map((project, idx) => (
           <a
             key={idx}
-            href={project.url}
-            target="_blank"
-            rel="noreferrer"
-            onClick={() => onProjectClick(project.title)}
-            onMouseEnter={() => setModal({ active: true, index: idx })}
-            onMouseMove={() => setModal((prev) => (prev.active && prev.index === idx ? prev : { active: true, index: idx }))}
+            href="/work"
+            onClick={(event) => {
+              event.preventDefault();
+              onProjectClick(project.title);
+            }}
+            onMouseEnter={() => playProjectPreview(idx)}
+            onMouseMove={() => {
+              if (!modal.active || modal.index !== idx) playProjectPreview(idx);
+            }}
             className="group py-10 sm:py-14 flex items-center justify-between transition-all duration-500 cursor-pointer select-none text-inherit no-underline"
           >
             <div className="flex items-center gap-4 transition-transform duration-500 group-hover:translate-x-4">
@@ -256,7 +276,7 @@ export const Projects: React.FC<ProjectsProps> = ({ experienceSectionRef, onProj
                     "'Neue Helvetica Georgian 55 Roman', 'Neue Helvetica Georgian', 'Helvetica Neue', Helvetica, sans-serif",
                 }}
               >
-                <ProjectTitle title={project.title} />
+                <ProjectTitle title={project.title} mark={project.mark} />
               </h3>
             </div>
 
@@ -295,13 +315,23 @@ export const Projects: React.FC<ProjectsProps> = ({ experienceSectionRef, onProj
             >
               {project.video ? (
                 <div className="relative w-full aspect-[16/10] rounded-sm overflow-hidden bg-black shadow-xl">
+                  <img
+                    src={project.image}
+                    alt=""
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
                   <video
+                    ref={(video) => {
+                      previewVideos.current[idx] = video;
+                    }}
                     src={project.video}
                     muted
                     playsInline
-                    autoPlay
                     loop
-                    className="w-full h-full object-cover"
+                    preload="metadata"
+                    className={`relative h-full w-full object-cover transition-opacity duration-300 ${
+                      modal.active && modal.index === idx ? 'opacity-100' : 'opacity-0'
+                    }`}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 flex items-end justify-between">
@@ -312,7 +342,7 @@ export const Projects: React.FC<ProjectsProps> = ({ experienceSectionRef, onProj
                           "'Neue Helvetica Georgian 55 Roman', 'Neue Helvetica Georgian', 'Helvetica Neue', Helvetica, sans-serif",
                       }}
                     >
-                      <ProjectTitle title={project.title} />
+                      <ProjectTitle title={project.title} mark={project.mark} />
                     </p>
                     <span className="text-xs font-mono text-white/70">{project.year}</span>
                   </div>
@@ -320,7 +350,7 @@ export const Projects: React.FC<ProjectsProps> = ({ experienceSectionRef, onProj
               ) : (
                 <div className="w-full aspect-[16/10] rounded-sm bg-[#141516] text-white flex items-center justify-center shadow-xl">
                   <span className="text-lg sm:text-xl tracking-tight">
-                    <ProjectTitle title={project.title} />
+                    <ProjectTitle title={project.title} mark={project.mark} />
                   </span>
                 </div>
               )}
