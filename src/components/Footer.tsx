@@ -12,7 +12,7 @@ interface FooterProps {
 export const Footer: React.FC<FooterProps> = ({
   animateHeadingOnScroll = false,
   theme = 'dark',
-  profileImage = '/profile.png',
+  profileImage = '/profile2.png',
 }) => {
   const [time, setTime] = useState('');
   const isLight = theme === 'light';
