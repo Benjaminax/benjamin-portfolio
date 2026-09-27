@@ -110,8 +110,6 @@ export const Navbar: React.FC<NavbarProps> = ({
         className="pointer-events-auto flex items-center gap-1.5 text-base sm:text-xl font-normal tracking-tight group cursor-pointer"
         style={{ ...navFont, color: light ? '#1c1d20' : '#ffffff' }}
       >
-        <span className={`transition-all duration-500 group-hover:opacity-40 shrink-0 ${light ? 'text-[#1c1d20]' : 'text-white'}`}>©</span>
-
         {/* Mobile: Code by Benjamin */}
         <span className={`md:hidden ${light ? 'text-[#1c1d20]' : 'text-white'}`}>Code by Benjamin</span>
 
