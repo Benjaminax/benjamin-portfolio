@@ -12,7 +12,7 @@ interface FooterProps {
 export const Footer: React.FC<FooterProps> = ({
   animateHeadingOnScroll = false,
   theme = 'dark',
-  profileImage = '/profile2.png',
+  profileImage = '/profile1.png',
 }) => {
   const [time, setTime] = useState('');
   const isLight = theme === 'light';
@@ -38,6 +38,7 @@ export const Footer: React.FC<FooterProps> = ({
   return (
     <footer
       id="contact"
+      data-profile-image={profileImage}
       className={`relative w-full select-none ${isLight ? 'bg-white text-[#1c1d20]' : 'bg-[#141516] text-white'}`}
     >
       <div className="max-w-7xl mx-auto px-6 sm:px-12 pt-12 sm:pt-16 pb-12">
@@ -65,16 +66,7 @@ export const Footer: React.FC<FooterProps> = ({
                   "'Neue Helvetica Georgian 55 Roman', 'Neue Helvetica Georgian', 'Helvetica Neue', Helvetica, 'Plus Jakarta Sans', Arial, sans-serif",
               }}
             >
-              <span className="flex items-center gap-3 sm:gap-6 flex-wrap">
-                <span className={`w-10 h-10 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-2 inline-block align-middle shrink-0 shadow-2xl ${isLight ? 'border-black/10 bg-gray-200' : 'border-white/20 bg-gray-500'}`}>
-                  <img
-                    src={profileImage}
-                    alt="Benjamin Acheampong"
-                    className="h-full w-full object-cover object-[50%_12%] [transform:translateY(30%)_scale(1.8)]"
-                  />
-                </span>
-                <span>Let&apos;s work</span>
-              </span>
+              <span>Let&apos;s work</span>
               <span className={`block mt-2 ${isLight ? 'text-gray-500' : 'text-gray-400'}`}>together</span>
             </motion.h2>
 

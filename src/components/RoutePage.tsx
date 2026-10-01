@@ -185,7 +185,7 @@ export const RoutePage: React.FC<RoutePageProps> = ({
               style={{ transform: 'translateY(var(--scroll-curve-reveal, 0px))' }}
             >
               <div className="mx-auto w-full max-w-7xl">
-                <Footer animateHeadingOnScroll theme="light" profileImage="/profile2.png" />
+                <Footer animateHeadingOnScroll theme="light" profileImage="/profile1.png" />
               </div>
             </div>
           </div>

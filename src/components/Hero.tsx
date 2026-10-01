@@ -141,20 +141,6 @@ export const Hero: React.FC<HeroProps> = () => {
         </div>
       </div>
 
-      {/* Profile image — responsive for mobile, tablet, and desktop */}
-      <div className="absolute bottom-0 left-0 right-0 top-0 z-10 pointer-events-none
-                      flex items-end justify-center overflow-hidden">
-        <motion.img
-          src="/profile2.png"
-          alt="Benjamin Acheampong"
-          initial={{ y: '22%', scale: 1.08 }}
-          animate={{ y: '0%', scale: 1 }}
-          transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1], delay: 0.25 }}
-          className="h-full w-[150vw] max-w-none object-contain object-bottom select-none origin-bottom
-                     scale-[1.42] sm:w-[130vw] sm:scale-[1.28] md:w-[120vw] md:scale-[1.12] lg:w-auto lg:min-w-0 lg:scale-100"
-        />
-      </div>
-
       {/* ── Mobile bottom elements — exactly matching Dennis Snellenberg layout ── */}
       <div className="md:hidden absolute bottom-10 left-5 sm:left-7 z-30 text-white flex flex-col items-start">
         <div className="mb-4">

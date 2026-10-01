@@ -41,7 +41,7 @@ export const AboutRoutePage: React.FC = () => {
 
         <div className="mt-12 flex aspect-[0.9] w-full items-end justify-center overflow-hidden bg-[#e8e8e6] sm:mt-16 sm:aspect-[1.7]">
           <img
-            src="/profile2.png"
+            src="/profile1.png"
             alt="Benjamin Acheampong"
             className="h-[94%] max-w-full object-contain object-bottom"
           />
@@ -98,7 +98,7 @@ export const AboutRoutePage: React.FC = () => {
           className="relative z-0 -mt-[360px] bg-[#141516]"
           style={{ transform: 'translateY(var(--scroll-curve-reveal, 0px))' }}
         >
-          <Footer animateHeadingOnScroll profileImage="/profile2.png" />
+          <Footer animateHeadingOnScroll profileImage="/profile1.png" />
         </div>
       </div>
     </div>
