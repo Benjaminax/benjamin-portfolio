@@ -198,8 +198,8 @@ export function App() {
               />
             </div>
             <div ref={experienceSectionRef} className="relative z-0 -mt-[360px] bg-[#141516]">
-              <Experience onNavigate={handleNavigate} />
-              <Footer profileImage="/profile1.png" />
+              <Experience />
+              <Footer profileImage="/profile2.png" />
             </div>
           </main>
         ) : (

@@ -5,7 +5,6 @@ import resumePdf from './assets/Benjamin_Acheampong_SWE_Resume.pdf';
 
 interface ExperienceProps {
   detailed?: boolean;
-  onNavigate?: (href: string, label: string) => void;
 }
 
 interface ExperienceItem {
@@ -67,7 +66,7 @@ const EXPERIENCE_BACKGROUND = [
   'But I’m still building.',
 ];
 
-export const Experience: React.FC<ExperienceProps> = ({ detailed = false, onNavigate }) => {
+export const Experience: React.FC<ExperienceProps> = ({ detailed = false }) => {
   const experienceStory = [...EXPERIENCES].reverse();
 
   return (
@@ -167,15 +166,13 @@ export const Experience: React.FC<ExperienceProps> = ({ detailed = false, onNavi
         ) : (
           <div className="border-t border-white/10">
             {EXPERIENCES.map((exp, index) => (
-              <motion.button
-                type="button"
+              <motion.div
                 key={exp.company}
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.15 }}
                 transition={{ duration: 0.5, delay: index * 0.08 }}
-                onClick={() => onNavigate?.('/experience', 'Experience')}
-                className="flex w-full cursor-pointer flex-col gap-2 border-b border-white/10 py-5 text-left sm:flex-row sm:items-center sm:justify-between sm:py-6"
+                className="flex flex-col gap-2 border-b border-white/10 py-5 sm:flex-row sm:items-center sm:justify-between sm:py-6"
               >
                 <h3 className="text-lg font-normal tracking-tight text-[#f4f4f5] sm:text-xl">
                   {exp.company}
@@ -184,7 +181,7 @@ export const Experience: React.FC<ExperienceProps> = ({ detailed = false, onNavi
                   <MapPin className="h-3.5 w-3.5 shrink-0 text-[#a374ff]" aria-hidden="true" />
                   {exp.location}
                 </p>
-              </motion.button>
+              </motion.div>
             ))}
           </div>
         )}

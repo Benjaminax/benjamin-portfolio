@@ -12,7 +12,7 @@ interface FooterProps {
 export const Footer: React.FC<FooterProps> = ({
   animateHeadingOnScroll = false,
   theme = 'dark',
-  profileImage = '/profile1.png',
+  profileImage = '/profile2.png',
 }) => {
   const [time, setTime] = useState('');
   const isLight = theme === 'light';
@@ -38,7 +38,6 @@ export const Footer: React.FC<FooterProps> = ({
   return (
     <footer
       id="contact"
-      data-profile-image={profileImage}
       className={`relative w-full select-none ${isLight ? 'bg-white text-[#1c1d20]' : 'bg-[#141516] text-white'}`}
     >
       <div className="max-w-7xl mx-auto px-6 sm:px-12 pt-12 sm:pt-16 pb-12">
