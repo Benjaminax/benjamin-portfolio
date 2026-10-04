@@ -44,6 +44,9 @@ export const Footer: React.FC<FooterProps> = ({
         {/* contact banner */}
         <div className={`border-b pb-12 sm:pb-20 ${isLight ? 'border-black/10' : 'border-white/10'}`}>
           <div className="flex items-center gap-3 mb-10">
+            <div className="relative h-10 w-10 overflow-hidden rounded-full ring-1 ring-white/20 shadow-lg">
+              <img src={profileImage} alt="Benjamin Acheampong" className="h-full w-full object-cover" />
+            </div>
             <span className="relative flex h-3 w-3">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
