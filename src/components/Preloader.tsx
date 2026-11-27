@@ -44,7 +44,7 @@ const slideUp = {
     opacity: 1,
   },
   exit: {
-    top: '-100vh',
+    top: '-125vh',
     transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] as const, delay: 0.2 },
   },
 };
@@ -55,7 +55,7 @@ const transitionSlide = {
     opacity: 1,
   },
   enter: {
-    top: ['100vh', '0vh', '0vh', '-100vh'],
+    top: ['100vh', '0vh', '0vh', '-125vh'],
     transition: {
       duration: NAVIGATION_TRANSITION_DURATION / 1000,
       times: [0, NAVIGATION_COVER_PROGRESS, NAVIGATION_HOLD_PROGRESS, 1],
@@ -63,7 +63,7 @@ const transitionSlide = {
     },
   },
   exit: {
-    top: '-100vh',
+    top: '-125vh',
     transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] as const, delay: 0.2 },
   },
 };
@@ -113,10 +113,13 @@ export const Preloader: React.FC<PreloaderProps> = ({
     return () => clearTimeout(timeout);
   }, [index, isTransition]);
 
+  const isMobile = dimension.width > 0 && dimension.width < 640;
+  const mobileExtraHeight = isMobile ? Math.max(160, Math.round(dimension.height * 0.2)) : 0;
+  const splashHeight = dimension.height + mobileExtraHeight;
   const topCurveDepth = isTransition ? 180 : 0;
-  const initialPath = `M0 ${topCurveDepth} Q${dimension.width / 2} ${-topCurveDepth} ${dimension.width} ${topCurveDepth} L${dimension.width} ${dimension.height} Q${dimension.width / 2} ${dimension.height + 300} 0 ${dimension.height} Z`;
-  const middlePath = `M0 0 Q${dimension.width / 2} 0 ${dimension.width} 0 L${dimension.width} ${dimension.height} Q${dimension.width / 2} ${dimension.height + 300} 0 ${dimension.height} Z`;
-  const targetPath = `M0 0 Q${dimension.width / 2} 0 ${dimension.width} 0 L${dimension.width} ${dimension.height} Q${dimension.width / 2} ${dimension.height} 0 ${dimension.height} Z`;
+  const initialPath = `M0 ${topCurveDepth} Q${dimension.width / 2} ${-topCurveDepth} ${dimension.width} ${topCurveDepth} L${dimension.width} ${splashHeight} Q${dimension.width / 2} ${splashHeight + 300} 0 ${splashHeight} Z`;
+  const middlePath = `M0 0 Q${dimension.width / 2} 0 ${dimension.width} 0 L${dimension.width} ${splashHeight} Q${dimension.width / 2} ${splashHeight + 300} 0 ${splashHeight} Z`;
+  const targetPath = `M0 0 Q${dimension.width / 2} 0 ${dimension.width} 0 L${dimension.width} ${splashHeight} Q${dimension.width / 2} ${splashHeight} 0 ${splashHeight} Z`;
 
   const curve = {
     initial: {
@@ -144,14 +147,13 @@ export const Preloader: React.FC<PreloaderProps> = ({
       animate={isTransition ? 'enter' : undefined}
       exit="exit"
       onAnimationComplete={isTransition ? onTransitionComplete : undefined}
-      className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center z-[99] pointer-events-auto"
-      style={{ height: '100vh', width: '100vw' }}
+      className="fixed top-0 left-0 w-screen h-screen h-[100dvh] flex items-center justify-center z-[99] pointer-events-auto"
     >
       {dimension.width > 0 && (
         <>
           <svg
             className="absolute top-0 z-[1] w-full pointer-events-none"
-            style={{ height: 'calc(100% + 300px)', width: '100%' }}
+            style={{ height: `calc(100% + ${300 + mobileExtraHeight}px)`, width: '100%' }}
           >
             <motion.path
               variants={curve}
