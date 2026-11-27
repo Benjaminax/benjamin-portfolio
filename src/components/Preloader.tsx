@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
 export const NAVIGATION_COVER_DURATION = 1000;
@@ -80,7 +80,6 @@ export const Preloader: React.FC<PreloaderProps> = ({
   onTransitionComplete,
 }) => {
   const [index, setIndex] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
   const [dimension, setDimension] = useState({
     width: typeof window !== 'undefined' ? window.innerWidth : 0,
     height: typeof window !== 'undefined' ? window.innerHeight : 0,
@@ -90,20 +89,16 @@ export const Preloader: React.FC<PreloaderProps> = ({
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
-    const measureDimension = () => {
-      // Use the actual rendered container height so we capture 100dvh on mobile
-      const h = containerRef.current
-        ? containerRef.current.getBoundingClientRect().height
-        : window.innerHeight;
-      setDimension({ width: window.innerWidth, height: h });
+    const handleResize = () => {
+      setDimension({ width: window.innerWidth, height: window.innerHeight });
     };
 
-    measureDimension();
-    window.addEventListener('resize', measureDimension);
+    handleResize();
+    window.addEventListener('resize', handleResize);
 
     return () => {
       document.body.style.overflow = prevOverflow;
-      window.removeEventListener('resize', measureDimension);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -118,11 +113,13 @@ export const Preloader: React.FC<PreloaderProps> = ({
     return () => clearTimeout(timeout);
   }, [index, isTransition]);
 
-  const splashHeight = dimension.height + 500; // extend well past viewport bottom to cover browser chrome gap
+  // The SVG path only drives the animated curve edge.
+  // Full-screen coverage is handled by the container's CSS background colour.
+  const curveH = dimension.height + 300;
   const topCurveDepth = isTransition ? 180 : 0;
-  const initialPath = `M0 ${topCurveDepth} Q${dimension.width / 2} ${-topCurveDepth} ${dimension.width} ${topCurveDepth} L${dimension.width} ${splashHeight} Q${dimension.width / 2} ${splashHeight + 300} 0 ${splashHeight} Z`;
-  const middlePath = `M0 0 Q${dimension.width / 2} 0 ${dimension.width} 0 L${dimension.width} ${splashHeight} Q${dimension.width / 2} ${splashHeight + 300} 0 ${splashHeight} Z`;
-  const targetPath = `M0 0 Q${dimension.width / 2} 0 ${dimension.width} 0 L${dimension.width} ${splashHeight} Q${dimension.width / 2} ${splashHeight} 0 ${splashHeight} Z`;
+  const initialPath = `M0 ${topCurveDepth} Q${dimension.width / 2} ${-topCurveDepth} ${dimension.width} ${topCurveDepth} L${dimension.width} ${curveH} Q${dimension.width / 2} ${curveH + 300} 0 ${curveH} Z`;
+  const middlePath  = `M0 0 Q${dimension.width / 2} 0 ${dimension.width} 0 L${dimension.width} ${curveH} Q${dimension.width / 2} ${curveH + 300} 0 ${curveH} Z`;
+  const targetPath  = `M0 0 Q${dimension.width / 2} 0 ${dimension.width} 0 L${dimension.width} ${curveH} Q${dimension.width / 2} ${curveH} 0 ${curveH} Z`;
 
   const curve = {
     initial: {
@@ -150,15 +147,14 @@ export const Preloader: React.FC<PreloaderProps> = ({
       animate={isTransition ? 'enter' : undefined}
       exit="exit"
       onAnimationComplete={isTransition ? onTransitionComplete : undefined}
-      ref={containerRef}
-      className="fixed top-0 left-0 w-screen flex items-center justify-center z-[99] pointer-events-auto"
-      style={{ height: '100dvh' }}
+      className="fixed inset-0 flex items-center justify-center z-[99] pointer-events-auto"
+      style={{ background: '#141516' }}
     >
       {dimension.width > 0 && (
         <>
           <svg
             className="absolute top-0 z-[1] w-full pointer-events-none"
-            style={{ height: 'calc(100% + 800px)', width: '100%' }}
+            style={{ height: `calc(100% + 600px)`, width: '100%' }}
           >
             <motion.path
               variants={curve}
