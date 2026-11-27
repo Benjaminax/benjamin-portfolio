@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
 export const NAVIGATION_COVER_DURATION = 1000;
@@ -80,6 +80,7 @@ export const Preloader: React.FC<PreloaderProps> = ({
   onTransitionComplete,
 }) => {
   const [index, setIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [dimension, setDimension] = useState({
     width: typeof window !== 'undefined' ? window.innerWidth : 0,
     height: typeof window !== 'undefined' ? window.innerHeight : 0,
@@ -89,16 +90,20 @@ export const Preloader: React.FC<PreloaderProps> = ({
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
-    const handleResize = () => {
-      setDimension({ width: window.innerWidth, height: window.innerHeight });
+    const measureDimension = () => {
+      // Use the actual rendered container height so we capture 100dvh on mobile
+      const h = containerRef.current
+        ? containerRef.current.getBoundingClientRect().height
+        : window.innerHeight;
+      setDimension({ width: window.innerWidth, height: h });
     };
 
-    handleResize();
-    window.addEventListener('resize', handleResize);
+    measureDimension();
+    window.addEventListener('resize', measureDimension);
 
     return () => {
       document.body.style.overflow = prevOverflow;
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('resize', measureDimension);
     };
   }, []);
 
@@ -113,9 +118,7 @@ export const Preloader: React.FC<PreloaderProps> = ({
     return () => clearTimeout(timeout);
   }, [index, isTransition]);
 
-  const isMobile = dimension.width > 0 && dimension.width < 640;
-  const mobileExtraHeight = isMobile ? Math.max(160, Math.round(dimension.height * 0.2)) : 0;
-  const splashHeight = dimension.height + mobileExtraHeight;
+  const splashHeight = dimension.height;
   const topCurveDepth = isTransition ? 180 : 0;
   const initialPath = `M0 ${topCurveDepth} Q${dimension.width / 2} ${-topCurveDepth} ${dimension.width} ${topCurveDepth} L${dimension.width} ${splashHeight} Q${dimension.width / 2} ${splashHeight + 300} 0 ${splashHeight} Z`;
   const middlePath = `M0 0 Q${dimension.width / 2} 0 ${dimension.width} 0 L${dimension.width} ${splashHeight} Q${dimension.width / 2} ${splashHeight + 300} 0 ${splashHeight} Z`;
@@ -147,13 +150,15 @@ export const Preloader: React.FC<PreloaderProps> = ({
       animate={isTransition ? 'enter' : undefined}
       exit="exit"
       onAnimationComplete={isTransition ? onTransitionComplete : undefined}
-      className="fixed top-0 left-0 w-screen h-screen h-[100dvh] flex items-center justify-center z-[99] pointer-events-auto"
+      ref={containerRef}
+      className="fixed top-0 left-0 w-screen flex items-center justify-center z-[99] pointer-events-auto"
+      style={{ height: '100dvh' }}
     >
       {dimension.width > 0 && (
         <>
           <svg
             className="absolute top-0 z-[1] w-full pointer-events-none"
-            style={{ height: `calc(100% + ${300 + mobileExtraHeight}px)`, width: '100%' }}
+            style={{ height: 'calc(100% + 300px)', width: '100%' }}
           >
             <motion.path
               variants={curve}
