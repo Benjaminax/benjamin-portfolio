@@ -88,7 +88,8 @@ export const Hero: React.FC<HeroProps> = () => {
   const marqueeText = 'Benjamin Acheampong\u00A0–\u00A0'.repeat(4);
 
   return (
-    <section className="relative h-screen min-h-[620px] md:min-h-[760px] lg:min-h-[640px] w-full overflow-hidden flex flex-col justify-between bg-[#999d9e] select-none">
+    <section className="relative h-[115dvh] min-h-[760px] md:h-screen md:min-h-[760px] lg:min-h-[640px] w-full overflow-hidden bg-[#999d9e] select-none">
+      <div className="relative h-screen min-h-[620px] md:h-full w-full flex flex-col justify-between">
 
       {/* ── Clock — large desktop only ───────────────────────────── */}
       <div className="hidden xl:block absolute left-14 top-32 z-30 pointer-events-auto">
@@ -180,6 +181,7 @@ export const Hero: React.FC<HeroProps> = () => {
       </div>
 
       <div className="h-4" />
+      </div>
     </section>
   );
 };
