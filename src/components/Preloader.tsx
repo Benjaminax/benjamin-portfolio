@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
 export const NAVIGATION_COVER_DURATION = 1000;
@@ -80,6 +80,7 @@ export const Preloader: React.FC<PreloaderProps> = ({
   onTransitionComplete,
 }) => {
   const [index, setIndex] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [dimension, setDimension] = useState({
     width: typeof window !== 'undefined' ? window.innerWidth : 0,
     height: typeof window !== 'undefined' ? window.innerHeight : 0,
@@ -90,7 +91,13 @@ export const Preloader: React.FC<PreloaderProps> = ({
     document.body.style.overflow = 'hidden';
 
     const handleResize = () => {
-      setDimension({ width: window.innerWidth, height: window.innerHeight });
+      const containerHeight = containerRef.current
+        ? containerRef.current.getBoundingClientRect().height
+        : 0;
+      setDimension({
+        width: window.innerWidth,
+        height: Math.max(window.innerHeight, containerHeight),
+      });
     };
 
     handleResize();
@@ -113,10 +120,9 @@ export const Preloader: React.FC<PreloaderProps> = ({
     return () => clearTimeout(timeout);
   }, [index, isTransition]);
 
-  // SVG path covers the visible viewport. The CSS background on the container
-  // + an extension div below handle the browser-chrome gap — no JS hacks needed.
   const splashHeight = dimension.height;
   const topCurveDepth = isTransition ? 180 : 0;
+
   const initialPath = `M0 ${topCurveDepth} Q${dimension.width / 2} ${-topCurveDepth} ${dimension.width} ${topCurveDepth} L${dimension.width} ${splashHeight} Q${dimension.width / 2} ${splashHeight + 300} 0 ${splashHeight} Z`;
   const middlePath  = `M0 0 Q${dimension.width / 2} 0 ${dimension.width} 0 L${dimension.width} ${splashHeight} Q${dimension.width / 2} ${splashHeight + 300} 0 ${splashHeight} Z`;
   const targetPath  = `M0 0 Q${dimension.width / 2} 0 ${dimension.width} 0 L${dimension.width} ${splashHeight} Q${dimension.width / 2} ${splashHeight} 0 ${splashHeight} Z`;
@@ -142,26 +148,15 @@ export const Preloader: React.FC<PreloaderProps> = ({
 
   return (
     <motion.div
+      ref={containerRef}
       variants={isTransition ? transitionSlide : slideUp}
       initial="initial"
       animate={isTransition ? 'enter' : undefined}
       exit="exit"
       onAnimationComplete={isTransition ? onTransitionComplete : undefined}
-      className="fixed top-0 left-0 right-0 flex items-center justify-center z-[99] pointer-events-auto"
-      style={{ background: '#141516', height: '100dvh' }}
+      className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center z-[99] pointer-events-auto"
+      style={{ height: '100lvh' }}
     >
-      {/* Extension: covers browser chrome that appears below 100dvh on mobile */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          top: '100%',
-          left: 0,
-          right: 0,
-          height: '50dvh',
-          background: '#141516',
-        }}
-      />
       {dimension.width > 0 && (
         <>
           <svg
@@ -176,20 +171,25 @@ export const Preloader: React.FC<PreloaderProps> = ({
               fill="#141516"
             />
           </svg>
-          <motion.p
-            variants={opacity}
-            initial="initial"
-            animate="enter"
-            exit="exit"
-            className="flex items-center text-white text-[38px] sm:text-[46px] md:text-[52px] font-normal z-[2] select-none absolute font-neue-helvetica"
-            style={{
-              fontFamily:
-                "'Neue Helvetica Georgian 55 Roman', 'Neue Helvetica Georgian', 'Helvetica Neue', Helvetica, 'Plus Jakarta Sans', Arial, sans-serif",
-            }}
+          <div
+            className="absolute top-0 left-0 right-0 flex items-center justify-center z-[2] pointer-events-none"
+            style={{ height: '100dvh' }}
           >
-            <span className="block w-[10px] h-[10px] bg-white rounded-full mr-3.5 shrink-0" />
-            {label ?? words[index]}
-          </motion.p>
+            <motion.p
+              variants={opacity}
+              initial="initial"
+              animate="enter"
+              exit="exit"
+              className="flex items-center text-white text-[38px] sm:text-[46px] md:text-[52px] font-normal select-none font-neue-helvetica"
+              style={{
+                fontFamily:
+                  "'Neue Helvetica Georgian 55 Roman', 'Neue Helvetica Georgian', 'Helvetica Neue', Helvetica, 'Plus Jakarta Sans', Arial, sans-serif",
+              }}
+            >
+              <span className="block w-[10px] h-[10px] bg-white rounded-full mr-3.5 shrink-0" />
+              {label ?? words[index]}
+            </motion.p>
+          </div>
         </>
       )}
     </motion.div>
