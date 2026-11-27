@@ -44,18 +44,18 @@ const slideUp = {
     opacity: 1,
   },
   exit: {
-    top: '-125vh',
+    top: '-150dvh',
     transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] as const, delay: 0.2 },
   },
 };
 
 const transitionSlide = {
   initial: {
-    top: '100vh',
+    top: '100dvh',
     opacity: 1,
   },
   enter: {
-    top: ['100vh', '0vh', '0vh', '-125vh'],
+    top: ['100dvh', '0dvh', '0dvh', '-150dvh'],
     transition: {
       duration: NAVIGATION_TRANSITION_DURATION / 1000,
       times: [0, NAVIGATION_COVER_PROGRESS, NAVIGATION_HOLD_PROGRESS, 1],
@@ -63,7 +63,7 @@ const transitionSlide = {
     },
   },
   exit: {
-    top: '-125vh',
+    top: '-150dvh',
     transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] as const, delay: 0.2 },
   },
 };
@@ -147,8 +147,8 @@ export const Preloader: React.FC<PreloaderProps> = ({
       animate={isTransition ? 'enter' : undefined}
       exit="exit"
       onAnimationComplete={isTransition ? onTransitionComplete : undefined}
-      className="fixed inset-0 flex items-center justify-center z-[99] pointer-events-auto"
-      style={{ background: '#141516' }}
+      className="fixed top-0 left-0 right-0 flex items-center justify-center z-[99] pointer-events-auto"
+      style={{ background: '#141516', height: '150dvh' }}
     >
       {dimension.width > 0 && (
         <>
