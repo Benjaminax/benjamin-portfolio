@@ -120,7 +120,9 @@ export const Preloader: React.FC<PreloaderProps> = ({
     return () => clearTimeout(timeout);
   }, [index, isTransition]);
 
-  const splashHeight = dimension.height;
+  const isMobile = dimension.width > 0 && dimension.width < 640;
+  const mobileExtraHeight = isMobile ? Math.max(160, Math.round(dimension.height * 0.2)) : 0;
+  const splashHeight = dimension.height + mobileExtraHeight;
   const topCurveDepth = isTransition ? 180 : 0;
 
   const initialPath = `M0 ${topCurveDepth} Q${dimension.width / 2} ${-topCurveDepth} ${dimension.width} ${topCurveDepth} L${dimension.width} ${splashHeight} Q${dimension.width / 2} ${splashHeight + 300} 0 ${splashHeight} Z`;
@@ -161,7 +163,7 @@ export const Preloader: React.FC<PreloaderProps> = ({
         <>
           <svg
             className="absolute top-0 z-[1] w-full pointer-events-none"
-            style={{ height: 'calc(100% + 300px)', width: '100%' }}
+            style={{ height: `calc(100% + ${300 + mobileExtraHeight}px)`, width: '100%' }}
           >
             <motion.path
               variants={curve}
