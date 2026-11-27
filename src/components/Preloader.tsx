@@ -118,7 +118,7 @@ export const Preloader: React.FC<PreloaderProps> = ({
     return () => clearTimeout(timeout);
   }, [index, isTransition]);
 
-  const splashHeight = dimension.height;
+  const splashHeight = dimension.height + 500; // extend well past viewport bottom to cover browser chrome gap
   const topCurveDepth = isTransition ? 180 : 0;
   const initialPath = `M0 ${topCurveDepth} Q${dimension.width / 2} ${-topCurveDepth} ${dimension.width} ${topCurveDepth} L${dimension.width} ${splashHeight} Q${dimension.width / 2} ${splashHeight + 300} 0 ${splashHeight} Z`;
   const middlePath = `M0 0 Q${dimension.width / 2} 0 ${dimension.width} 0 L${dimension.width} ${splashHeight} Q${dimension.width / 2} ${splashHeight + 300} 0 ${splashHeight} Z`;
@@ -158,7 +158,7 @@ export const Preloader: React.FC<PreloaderProps> = ({
         <>
           <svg
             className="absolute top-0 z-[1] w-full pointer-events-none"
-            style={{ height: 'calc(100% + 300px)', width: '100%' }}
+            style={{ height: 'calc(100% + 800px)', width: '100%' }}
           >
             <motion.path
               variants={curve}
