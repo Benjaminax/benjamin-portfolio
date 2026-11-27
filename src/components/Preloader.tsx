@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
-export const NAVIGATION_COVER_DURATION = 1250;
-const NAVIGATION_HOLD_DURATION = 550;
-const NAVIGATION_EXIT_DURATION = 1150;
+export const NAVIGATION_COVER_DURATION = 750;
+const NAVIGATION_HOLD_DURATION = 350;
+const NAVIGATION_EXIT_DURATION = 600;
 export const NAVIGATION_TRANSITION_DURATION =
   NAVIGATION_COVER_DURATION + NAVIGATION_HOLD_DURATION + NAVIGATION_EXIT_DURATION;
 export const NAVIGATION_COVER_PROGRESS =
@@ -45,7 +45,7 @@ const slideUp = {
   },
   exit: {
     top: '-150dvh',
-    transition: { duration: 1.15, ease: [0.76, 0, 0.24, 1] as const, delay: 0.2 },
+    transition: { duration: 0.65, ease: [0.76, 0, 0.24, 1] as const, delay: 0.15 },
   },
 };
 
@@ -64,7 +64,7 @@ const transitionSlide = {
   },
   exit: {
     top: '-150dvh',
-    transition: { duration: 1.15, ease: [0.76, 0, 0.24, 1] as const, delay: 0.2 },
+    transition: { duration: 0.65, ease: [0.76, 0, 0.24, 1] as const, delay: 0.15 },
   },
 };
 
@@ -130,7 +130,7 @@ export const Preloader: React.FC<PreloaderProps> = ({
   const curve = {
     initial: {
       d: initialPath,
-      transition: { duration: 1.05, ease: [0.76, 0, 0.24, 1] as const },
+      transition: { duration: 0.55, ease: [0.76, 0, 0.24, 1] as const },
     },
     flow: {
       d: [initialPath, middlePath, middlePath, targetPath],
@@ -142,7 +142,7 @@ export const Preloader: React.FC<PreloaderProps> = ({
     },
     exit: {
       d: targetPath,
-      transition: { duration: 1.05, ease: [0.76, 0, 0.24, 1] as const, delay: 0.3 },
+      transition: { duration: 0.55, ease: [0.76, 0, 0.24, 1] as const, delay: 0.2 },
     },
   };
 
