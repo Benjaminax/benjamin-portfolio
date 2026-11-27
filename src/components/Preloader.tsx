@@ -113,13 +113,13 @@ export const Preloader: React.FC<PreloaderProps> = ({
     return () => clearTimeout(timeout);
   }, [index, isTransition]);
 
-  // The SVG path only drives the animated curve edge.
-  // Full-screen coverage is handled by the container's CSS background colour.
-  const curveH = dimension.height + 300;
+  // SVG path covers the visible viewport. The CSS background on the container
+  // + an extension div below handle the browser-chrome gap — no JS hacks needed.
+  const splashHeight = dimension.height;
   const topCurveDepth = isTransition ? 180 : 0;
-  const initialPath = `M0 ${topCurveDepth} Q${dimension.width / 2} ${-topCurveDepth} ${dimension.width} ${topCurveDepth} L${dimension.width} ${curveH} Q${dimension.width / 2} ${curveH + 300} 0 ${curveH} Z`;
-  const middlePath  = `M0 0 Q${dimension.width / 2} 0 ${dimension.width} 0 L${dimension.width} ${curveH} Q${dimension.width / 2} ${curveH + 300} 0 ${curveH} Z`;
-  const targetPath  = `M0 0 Q${dimension.width / 2} 0 ${dimension.width} 0 L${dimension.width} ${curveH} Q${dimension.width / 2} ${curveH} 0 ${curveH} Z`;
+  const initialPath = `M0 ${topCurveDepth} Q${dimension.width / 2} ${-topCurveDepth} ${dimension.width} ${topCurveDepth} L${dimension.width} ${splashHeight} Q${dimension.width / 2} ${splashHeight + 300} 0 ${splashHeight} Z`;
+  const middlePath  = `M0 0 Q${dimension.width / 2} 0 ${dimension.width} 0 L${dimension.width} ${splashHeight} Q${dimension.width / 2} ${splashHeight + 300} 0 ${splashHeight} Z`;
+  const targetPath  = `M0 0 Q${dimension.width / 2} 0 ${dimension.width} 0 L${dimension.width} ${splashHeight} Q${dimension.width / 2} ${splashHeight} 0 ${splashHeight} Z`;
 
   const curve = {
     initial: {
@@ -148,13 +148,25 @@ export const Preloader: React.FC<PreloaderProps> = ({
       exit="exit"
       onAnimationComplete={isTransition ? onTransitionComplete : undefined}
       className="fixed top-0 left-0 right-0 flex items-center justify-center z-[99] pointer-events-auto"
-      style={{ background: '#141516', height: '150dvh' }}
+      style={{ background: '#141516', height: '100dvh' }}
     >
+      {/* Extension: covers browser chrome that appears below 100dvh on mobile */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: '100%',
+          left: 0,
+          right: 0,
+          height: '50dvh',
+          background: '#141516',
+        }}
+      />
       {dimension.width > 0 && (
         <>
           <svg
             className="absolute top-0 z-[1] w-full pointer-events-none"
-            style={{ height: `calc(100% + 600px)`, width: '100%' }}
+            style={{ height: 'calc(100% + 300px)', width: '100%' }}
           >
             <motion.path
               variants={curve}
